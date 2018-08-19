@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "3a636cfc-f00b-4605-bdb1-7ebe902d2ded",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "btn_redwar": {
+      "ver": "1.0.3",
+      "uuid": "56cf33f1-3e46-4a0b-95ce-f1ca7ec0be9d",
+      "rawTextureUuid": "3a636cfc-f00b-4605-bdb1-7ebe902d2ded",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 1,
+      "trimY": 0,
+      "width": 440,
+      "height": 142,
+      "rawWidth": 442,
+      "rawHeight": 142,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

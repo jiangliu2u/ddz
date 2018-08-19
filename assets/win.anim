@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "win",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.09803921568627451,
+  "sample": 51,
+  "speed": 0.3,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            0,
+            583
+          ]
+        },
+        {
+          "frame": 0.09803921568627451,
+          "value": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

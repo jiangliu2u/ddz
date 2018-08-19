@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "lose",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.03333333333333333,
+  "sample": 30,
+  "speed": 0.1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -912,
+            0
+          ]
+        },
+        {
+          "frame": 0.03333333333333333,
+          "value": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

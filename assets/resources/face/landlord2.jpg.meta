@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "c87e0ade-838b-42b5-9f8b-3566834a5ebe",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "landlord2": {
+      "ver": "1.0.3",
+      "uuid": "9d41ba23-1861-4161-88d3-43b17ba02266",
+      "rawTextureUuid": "c87e0ade-838b-42b5-9f8b-3566834a5ebe",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 200,
+      "height": 200,
+      "rawWidth": 200,
+      "rawHeight": 200,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
