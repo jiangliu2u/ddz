@@ -55,10 +55,10 @@ cc.Class({
 
         // test handout 
         // this._testHandoutPoker();
-        var clock = cc.instantiate(this.clockPrefab);
-        clock.setPosition(cc.p(0,0));
-        clock.getComponent("clock").startCountdown(3);
-        this.node.addChild(clock);
+        // var clock = cc.instantiate(this.clockPrefab);
+        // clock.setPosition(cc.p(0,-75));
+        // clock.getComponent("clock").startCountdown(30);
+        // this.node.addChild(clock);
 
         this._createDipai([0x10, 0x4D, 0x5E]);
         return;
@@ -169,9 +169,9 @@ cc.Class({
     },
 
     /**
-     * 0表示自己
-     * 1表示左边的玩家
-     * 2表示右边的玩家
+     * 0表示自己节点坐标(-570,-250)
+     * 1表示左边的玩家,节点坐标(-570,90)
+     * 2表示右边的玩家,节点坐标(604,90)
      */
      _createFace: function(seatId,name, coin) {
         var face = cc.instantiate(this.facePrefab);

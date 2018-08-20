@@ -21,40 +21,41 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad: function () {
+        this.startCountdown(15);
+    },
     startCountdown: function (countdown) {
         this._countdown = countdown;
         this._doShow();
         this._doSetCountdown(this._countdown);
-        this.schedule(this._scheduleClock,1);
+        this.schedule(this._scheduleClock, 1);
     },
 
-    _scheduleClock: function() {
+    _scheduleClock: function () {
         this._countdown--;
         console.log(this._countdown);
         if (this._countdown < 0) {
-            this.unschedule(this._scheduleClock);
-            this._doHide();
+            this.stopCountdown();
             return;
         }
         this._doSetCountdown(this._countdown);
     },
 
-    _doShow: function() {
+    _doShow: function () {
         this.node.active = true;
     },
 
-    _doHide: function() {
+    _doHide: function () {
         this.node.active = false;
     },
 
-    _doSetCountdown: function(countdown) {
+    _doSetCountdown: function (countdown) {
         this.countdownLbl.string = countdown;
     },
 
     stopCountdown: function () {
         this._doSetCountdown(0);
-        this._doHide();
+        //this._doHide();
         this.unschedule(this._scheduleClock);
     },
 

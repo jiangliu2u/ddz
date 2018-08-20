@@ -72,11 +72,11 @@ cc.Class({
         // delta 如果是负的，说明是左往右
         console.log(this);
         console.log("TOUCH_END endPos.x: " + endPos.x + ",endPos.y: " + endPos.y);
-        target.getComponent('pokerPanel')._calcTouchedPokers(this._startPos,endPos);
+        target.getComponent('pokerPanel')._calcTouchedPokers(this._startPos, endPos);
     },
 
 
-    getSelectedPokers: function() {
+    getSelectedPokers: function () {
         var pokers = this.pokers;
         var len = pokers.length;
         if (len === 0) {
@@ -84,14 +84,14 @@ cc.Class({
         }
 
         var selectedPokers = [];
-        for(var i = 0; i < len; i++) {
+        for (var i = 0; i < len; i++) {
             var poker = this.pokers[i];
 
             if (poker.getComponent('poker').selected) {
                 selectedPokers.push(poker);
             }
         }
-        
+
         return selectedPokers;
     },
 
@@ -119,7 +119,7 @@ cc.Class({
 
         var leftIndex = Math.floor((realLX - leftPos) / this._MARGIN);
         var rightIndex = Math.floor((realRX - leftPos) / this._MARGIN);
-        console.log("leftIndex:"+ leftIndex+" rightIndex:"+rightIndex);
+        console.log("leftIndex:" + leftIndex + " rightIndex:" + rightIndex);
 
 
     },
@@ -156,7 +156,7 @@ cc.Class({
 
     _testInitPoker: function () {
 
-        var pokers = [0x10, 0x01, 0x12, 0x23, 0x34, 0x15, 0x26, 0x37, 0x08, 0x29, 0x3A, 0x1B, 0x1C, 0x4D, 0x5E]
+        var pokers = [0x01, 0x20, 0x30, 0x01, 0x12, 0x12, 0x23, 0x34, 0x15, 0x26, 0x26, 0x27, 0x37, 0x08, 0x29, 0x3A, 0x1B, 0x1C, 0x4D, 0x5E]
 
         //pokers = pokers.slice(0, 5);
 
