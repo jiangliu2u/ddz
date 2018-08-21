@@ -74,7 +74,7 @@ Util.neatenPoker=function (pokerNode, seatPosParam, showWidth, startX) {
     for (var i = 0; i < pokerNode.length; i++) {
         var x = startX + i * seatPosParam.disBetween + pokerNode[0].getComponent('PokerControl').node.width * seatPosParam.pokerScale * 0.5;
         var y = seatPosParam.positionY;
-        pokerNode[i].setPosition(cc.p(x, y));
+        pokerNode[i].setPosition(cc.v2(x, y));
 
     }
 },

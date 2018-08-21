@@ -1,6 +1,7 @@
 const config = require('config');
-const PokerPlay = require('PokerHandler');
-const Util = require('Util');
+const PokerPlay = require('poker_handler');
+const Util = require('util');
+const common = require("./common/_init");
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -53,14 +54,12 @@ cc.Class({
 
     onLoad: function () {
 
-        // test handout 
-        // this._testHandoutPoker();
-        // var clock = cc.instantiate(this.clockPrefab);
-        // clock.setPosition(cc.p(0,-75));
-        // clock.getComponent("clock").startCountdown(30);
-        // this.node.addChild(clock);
-
-        this._createDipai([0x10, 0x4D, 0x5E]);
+        // this._createDipai([0x10, 0x4D, 0x5E]);
+        this._createHandedOutPoker([0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x23, 0x22, 0x25, 0x12, 0x13, 0x23, 0x22, 0x25], 2);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE,this._createFace,this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE,this._createFace,this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_START_GAME, this._createHandPoker,this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker,this);
         return;
 
         this.controlPanel.active = false;
@@ -140,27 +139,25 @@ cc.Class({
 
     },
 
-    _createDipai: function() {
-        
-        var pokers = [0x10, 0x4D, 0x5E];
+    _createDipai: function (pokers) {
 
-        for(var i = 0; i < pokers.length; i++) {
+        for (var i = 0; i < pokers.length; i++) {
             var pokerPrefab = cc.instantiate(this.poker);
             var script = pokerPrefab.getComponent("poker");
             script.initPoker(pokers[i], 1);
             script.doDisable();
-            pokerPrefab.setPosition(cc.p(-30 + i * 30, 0));
+            pokerPrefab.setPosition(cc.v2(-30 + i * 30, 0));
             this.dipaiPanel.node.addChild(pokerPrefab);
         }
     },
 
-    _testCreateFaces: function() {
+    _testCreateFaces: function () {
         this.onPlayerEnterRoom({ seatId: 0, name: 'zxf', coin: 1234 });
         this.onPlayerEnterRoom({ seatId: 1, name: 'zxf', coin: 444 });
         this.onPlayerEnterRoom({ seatId: 2, name: 'zxf', coin: 33 });
     },
 
-    onPlayerEnterRoom: function(player) {
+    onPlayerEnterRoom: function (player) {
         var name = player.name;
         var coin = player.coin;
         var seatId = player.seatId;
@@ -173,51 +170,40 @@ cc.Class({
      * 1表示左边的玩家,节点坐标(-570,90)
      * 2表示右边的玩家,节点坐标(604,90)
      */
-     _createFace: function(seatId,name, coin) {
+    _createFace: function (seatId, name, coin) {
         var face = cc.instantiate(this.facePrefab);
         face.getComponent('facecontroller').initFace("zxf", 12345, null);
         this.faceNodes[seatId].addChild(face);
     },
 
-    _testHandoutPoker: function() {
+    _testHandoutPoker: function () {
         var data = [{ 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-            { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-            { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-            { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }];
-        this._createHandPoker(data, this.pokerCard, this.pokerPanel);
+        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
+        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
+        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }];
+        //this._createHandPoker(data);
     },
 
-    //发牌
-    startHandoutPoker: function () {
-        var myPokerData = this.poker;
+    //创建手牌
+    _createHandPoker: function (pokers) {
         var myPokerNode = [];
-        var sceneWidth = cc.director.getWinSize().width;
-        
-        // this._createHandPoker(myPokerData, this.pokerCard, this.pokerPanel);
-        // for (var i = 0; i < myPokerData.length; i++) {
-        //     var cardNode = cc.instantiate(this.pokerCard);
-        //     cardNode.parent = this.node;
-        //     cardNode.scale = config.seatPos.center.pokerScale;
-        //     var poker = cardNode.getComponent('PokerControl');
-        //     poker.showPoker(myPokerData[i]);
-        //     myPokerNode.push(cardNode);
-        //     Util.neatenPoker(myPokerNode, config.seatPos.center, sceneWidth);
-        // }
-    },
-
-    _createHandPoker: function (myPokerData, cardPrefab, parent) {
-        var myPokerNode = [];
-        var sceneWidth = cc.director.getWinSize().width;
+        //var sceneWidth = cc.director.getWinSize().width;
         for (var i = 0; i < myPokerData.length; i++) {
-            var cardNode = cc.instantiate(cardPrefab);
-            parent.node.addChild(cardNode);
+            var cardNode = cc.instantiate(this.pokerCard);
+            this.pokerPanel.addChild(cardNode);
             cardNode.scale = config.seatPos.center.pokerScale;
             var poker = cardNode.getComponent('PokerControl');
             poker.showPoker(myPokerData[i]);
             myPokerNode.push(cardNode);
-            cardNode.setPosition(cc.p(30 * i, 0));
+            cardNode.setPosition(cc.v2(30 * i, 0));
             // Util.neatenPoker(myPokerNode, config.seatPos.center, sceneWidth);
         }
+    },
+    //显示玩家出的牌
+    _createHandedOutPoker: function (pokers, index) {
+        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
+        var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
+        hop._createHandedOutPoker(pokers, index);
     },
 
     //获取选中的牌，不符合规定的牌型则无返回值
@@ -283,7 +269,7 @@ cc.Class({
         for (var i = 0; i < this.node.children.length; i++) {//删除刷新前的牌
             if (this.node.children[i]._name === name) {
                 this.node.children[i].destroy();
-                console.log(name+"deleted")
+                console.log(name + "deleted")
             }
         }
     }

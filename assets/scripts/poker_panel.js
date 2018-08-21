@@ -41,7 +41,6 @@ cc.Class({
     onLoad() {
 
         this.pokers = [];
-        console.log(this.altas);
         var self = this;
         var node = this.node;
         this._startPos = 0;
@@ -148,7 +147,7 @@ cc.Class({
             var pokerPrefab = cc.instantiate(this.poker);
             var script = pokerPrefab.getComponent("poker");
             script.initPoker(pokers[i]);
-            pokerPrefab.setPosition(cc.p(startPos + i * this._MARGIN, 0));
+            pokerPrefab.setPosition(cc.v2(startPos + i * this._MARGIN, 0));
             this.node.addChild(pokerPrefab);
             this.pokers.push(pokerPrefab);
         }
@@ -157,9 +156,6 @@ cc.Class({
     _testInitPoker: function () {
 
         var pokers = [0x01, 0x20, 0x30, 0x01, 0x12, 0x12, 0x23, 0x34, 0x15, 0x26, 0x26, 0x27, 0x37, 0x08, 0x29, 0x3A, 0x1B, 0x1C, 0x4D, 0x5E]
-
-        //pokers = pokers.slice(0, 5);
-
         this._createPokers(pokers);
     },
 

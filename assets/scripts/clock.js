@@ -33,7 +33,6 @@ cc.Class({
 
     _scheduleClock: function () {
         this._countdown--;
-        console.log(this._countdown);
         if (this._countdown < 0) {
             this.stopCountdown();
             return;

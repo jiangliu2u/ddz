@@ -29,8 +29,6 @@ cc.Class({
     initFace: function(name, coin, face) {
         this.nameLbl.string = name;
         this.coinLbl.string = coin + '';
-
-        console.log(this._FACE_MAP);
         // var spriteFrame =
         this.faceSpr.spriteFrame = this.FACE_MAP[0];
     },

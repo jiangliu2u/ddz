@@ -17,7 +17,7 @@ const common = require('_init');
             }
 
             this._eventMap[eventName] = this._eventMap[eventName] || [];
-
+            console.log(eventName);
             this._eventMap[eventName].push({
                 handler: handler,
                 scope: scope
@@ -29,7 +29,7 @@ const common = require('_init');
                 console.error("event name is undefined!");
                 return;
             }
-
+            console.log(params);
             var events = this._eventMap[eventName];
             if (!events) {
                 console.error("events is undefined!");

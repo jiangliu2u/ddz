@@ -13,15 +13,17 @@ const common = require('_init');
             // todo
             // this.register('create_room', this._onCreateRoom);
 
-            this._onEnterTable();
+            // this._onEnterTable();
+            console.log('gagagagag');
             this._onCreateRoom();
-            this._onTest();
+            // this._onTest();
 
         },
 
         _onCreateRoom: function () {
             g.io.on('create room', function (data) {
                 console.log(data);
+                console.log('hahah');
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CREATE_ROOM, data);
             });
         },

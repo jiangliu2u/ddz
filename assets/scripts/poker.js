@@ -123,7 +123,7 @@ cc.Class({
                 var spriteFrame = this.altas.getSpriteFrame(path);
                 this.pointSpr.spriteFrame = spriteFrame;
                 // this.pointSpr.scale =0.1;
-                this.pointSpr.node.setPosition(cc.p(-52, 30));
+                this.pointSpr.node.setPosition(cc.v2(-52, 30));
                 var flower = this.altas.getSpriteFrame("images-poker-Card_clown_gray");
                 this.bigFlowerSpr.spriteFrame = flower;
                 this.smallFlowerSpr.spriteFrame = null;
@@ -131,7 +131,7 @@ cc.Class({
                 var path = "images-poker-Card_JOKER_red";
                 var spriteFrame = this.altas.getSpriteFrame(path);
                 this.pointSpr.spriteFrame = spriteFrame;
-                this.pointSpr.node.setPosition(cc.p(-52, 30));
+                this.pointSpr.node.setPosition(cc.v2(-52, 30));
 
                 // this.pointSpr.scale = 0.1;
                 var flower = this.altas.getSpriteFrame("images-poker-Card_clown_red");

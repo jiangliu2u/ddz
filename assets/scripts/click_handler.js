@@ -1,5 +1,5 @@
-const PokerPlay = require('PokerHandler');
-const Util = require('Util');
+const PokerPlay = require('poker_handler');
+const Util = require('util');
 cc.Class({
     extends: cc.Component,
 
@@ -13,8 +13,8 @@ cc.Class({
 
 
     onLoad: function () {
-        console.log(this.Game.getComponent("Game").status);
-        this.control = this.Game.getComponent("Game");
+        console.log(this.Game.getComponent("game").status);
+        this.control = this.Game.getComponent("game");
         this.control.io = g.io;
     },
     //出牌，并向服务器发送数据，出牌的数据

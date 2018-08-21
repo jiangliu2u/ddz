@@ -43,9 +43,7 @@ cc.Class({
         // 4th succ: loading home scene
 
         g.io = io.connect('http://127.0.0.1:3001');
-
         common.Protocol.init();
-
         var self = this;
         g.io.on("rooms",function(data){
             self.deleteRoomNode('room');

@@ -1,5 +1,5 @@
-const PokerTypeHandler = require('PokerTypeHandler');
-const Util = require('Util');
+const PokerTypeHandler = require('poker_type_handler');
+const Util = require('util');
 
 function PokerMap() {//统计各种牌的数量
     this.size();
