@@ -51,7 +51,7 @@ cc.Class({
         // node.on(cc.Node.EventType.TOUCH_END, function(event) {
         //     self.onTouchEnd(event);
         // });
-        this._testInitPoker();
+        //this._testInitPoker();
     },
 
     onTouchStart: function (event) {

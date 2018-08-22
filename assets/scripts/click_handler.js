@@ -13,7 +13,6 @@ cc.Class({
 
 
     onLoad: function () {
-        console.log(this.Game.getComponent("game").status);
         this.control = this.Game.getComponent("game");
         this.control.io = g.io;
     },

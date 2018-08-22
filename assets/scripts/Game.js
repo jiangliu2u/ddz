@@ -11,14 +11,14 @@ cc.Class({
         },
         dipaiPanel: {
             default: null,
-            type: cc.Layout
+            type: cc.Node
         },
         pokerPanel: {
             default: null,
-            type: cc.Layout
+            type: cc.Node
         },
         faceNodes: {
-            default: [],
+            default: null,
             type: cc.Node
         },
         controlPanel: {
@@ -55,11 +55,12 @@ cc.Class({
     onLoad: function () {
 
         // this._createDipai([0x10, 0x4D, 0x5E]);
-        this._createHandedOutPoker([0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x23, 0x22, 0x25, 0x12, 0x13, 0x23, 0x22, 0x25], 2);
+        //this._createHandedOutPoker([0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x23, 0x22, 0x25, 0x12, 0x13, 0x23, 0x22, 0x25], 2);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE,this._createFace,this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE,this._createFace,this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_START_GAME, this._createHandPoker,this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker,this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_START_GAME, this._createHandPoker, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
+        common.Protocol.init();
+
         return;
 
         this.controlPanel.active = false;
@@ -173,31 +174,16 @@ cc.Class({
     _createFace: function (seatId, name, coin) {
         var face = cc.instantiate(this.facePrefab);
         face.getComponent('facecontroller').initFace("zxf", 12345, null);
-        this.faceNodes[seatId].addChild(face);
+        var faces = this.faceNodes.children;
+        faces[seatId].addChild(face);
     },
 
-    _testHandoutPoker: function () {
-        var data = [{ 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' },
-        { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }, { 'showTxt': 4, showType: 'spade' }];
-        //this._createHandPoker(data);
-    },
-
+    _testHandoutPoker: function () { },
     //创建手牌
     _createHandPoker: function (pokers) {
-        var myPokerNode = [];
-        //var sceneWidth = cc.director.getWinSize().width;
-        for (var i = 0; i < myPokerData.length; i++) {
-            var cardNode = cc.instantiate(this.pokerCard);
-            this.pokerPanel.addChild(cardNode);
-            cardNode.scale = config.seatPos.center.pokerScale;
-            var poker = cardNode.getComponent('PokerControl');
-            poker.showPoker(myPokerData[i]);
-            myPokerNode.push(cardNode);
-            cardNode.setPosition(cc.v2(30 * i, 0));
-            // Util.neatenPoker(myPokerNode, config.seatPos.center, sceneWidth);
-        }
+        var pokerPanel = this.pokerPanel.getComponent('poker_panel');
+        pokerPanel._createPokers(pokers)
+        
     },
     //显示玩家出的牌
     _createHandedOutPoker: function (pokers, index) {

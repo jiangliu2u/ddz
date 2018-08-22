@@ -51,7 +51,7 @@ cc.Class({
         
     },
     onLoad () {
-        this._initFace();
+        //this._initFace();
     },
 
     start () {

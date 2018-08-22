@@ -17,7 +17,6 @@ const common = require('_init');
             }
 
             this._eventMap[eventName] = this._eventMap[eventName] || [];
-            console.log(eventName);
             this._eventMap[eventName].push({
                 handler: handler,
                 scope: scope

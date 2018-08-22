@@ -13,8 +13,7 @@ const common = require('_init');
             // todo
             // this.register('create_room', this._onCreateRoom);
 
-            // this._onEnterTable();
-            console.log('gagagagag');
+            this._onEnterTable();
             this._onCreateRoom();
             // this._onTest();
 
@@ -29,7 +28,8 @@ const common = require('_init');
         },
 
         _onEnterTable: function() {
-            g.io.on('jointable', function (data) {
+            console.log("_onEnterTable");
+            g.io.on('MSG_DDZ_ENTER_TABLE', function (data) {
                 console.log(data);
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE, data);
             });
