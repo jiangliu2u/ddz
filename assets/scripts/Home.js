@@ -1,5 +1,6 @@
 window.g = {};
 const common = require('_init');
+const Player = require("./player");
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -42,9 +43,16 @@ cc.Class({
         // 3rd recevied success cmd: get homeinfo(userinfo)
         // 4th succ: loading home scene
 
-        g.io = io.connect('http://127.0.0.1:3001');
-        var self = this;
-        g.io.on("rooms",function(data){
+        var socket = io.connect('http://127.0.0.1:3001');
+        socket.on("yourid",function(data){
+            socket.id = data['id'];
+            console.log(socket.id);
+            g.player = new Player(socket);
+        });
+        
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
+        return;
+        g.player.on("rooms",function(data){
             self.deleteRoomNode('room');
             console.log(data);
             
@@ -60,7 +68,6 @@ cc.Class({
             }
         });
 
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
     },
 
     onDestroy() {
@@ -74,7 +81,7 @@ cc.Class({
 
     createRoom: function () {
         console.log('创建房间！');
-        g.io.emit("create room", { 'name': this.id });
+        g.player.emit("create room", { 'name': this.id });
         if (this._onClickCallback) {
             this._onClickCallback();
         }
@@ -83,7 +90,7 @@ cc.Class({
         this.loadingAnimation.play('loading');
         cc.director.loadScene('Game');
 
-        // g.io.on('create room', function (data) {
+        // g.player.on('create room', function (data) {
         //     console.log(data);
         //     common.EventDispatcher.trigger(ddz.EventType.MSG_DDZ_ENTER_TABLE, data);
         // });

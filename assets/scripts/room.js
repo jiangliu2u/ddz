@@ -37,13 +37,13 @@ cc.Class({
 
     // createRoom: function () {
     //     console.log('创建房间！');
-    //     g.io.emit("create room", { 'name': this.id });
+    //     g.player.emit("create room", { 'name': this.id });
     //     if (this._onClickCallback) {
     //         this._onClickCallback();
     //     }
     //     // cc.director.loadScene('Game');
 
-    //     // g.io.on('create room', function (data) {
+    //     // g.player.on('create room', function (data) {
     //     //     console.log(data);
     //     //     common.EventDispatcher.trigger(ddz.EventType.MSG_DDZ_ENTER_TABLE, data);
     //     // });

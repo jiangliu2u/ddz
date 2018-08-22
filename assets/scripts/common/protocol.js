@@ -20,7 +20,7 @@ const common = require('_init');
         },
 
         _onCreateRoom: function () {
-            g.io.on('create room', function (data) {
+            g.player.register('create room', function (data) {
                 console.log(data);
                 console.log('hahah');
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CREATE_ROOM, data);
@@ -29,15 +29,15 @@ const common = require('_init');
 
         _onEnterTable: function() {
             console.log("_onEnterTable");
-            g.io.on('MSG_DDZ_ENTER_TABLE', function (data) {
+            g.player.register('MSG_DDZ_ENTER_TABLE', function (data) {
                 console.log(data);
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE, data);
             });
         },
         _onTest: function () {
-            g.io.on('test', function (data) {
+            g.player.register('test', function (data) {
                 console.log(data);
-                g.io.emit("test",data);
+                g.player.emit("test",data);
                 //common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE, data);
             });
         },

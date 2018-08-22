@@ -60,7 +60,11 @@ cc.Class({
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_START_GAME, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
         common.Protocol.init();
-
+        var self = this;
+        g.player.sendMsg("MSG_DDZ_ENTER_TABLE",{cmd:"join",tableId:1,player:g.player.id});
+        g.player.register("deal_poker",function(data){
+            self._createHandPoker(data);
+        });
         return;
 
         this.controlPanel.active = false;
@@ -73,7 +77,7 @@ cc.Class({
         // this.io = io.connect('http://localhost:3001');
         var self = this;
         self.poker = null;
-        g.io.on('start', function (data) {//所有玩家完成连接开始发牌
+        g.player.on('start', function (data) {//所有玩家完成连接开始发牌
             self.deletePokerNode('poker');
             self.deletePokerNode('targetPoker');
             self.poker = data['poker'];
@@ -85,7 +89,7 @@ cc.Class({
             self.team = data['team'];
             self.startHandoutPoker();
         });
-        g.io.on('your turn', function (data) {//轮到某个玩家出牌
+        g.player.on('your turn', function (data) {//轮到某个玩家出牌
             if (this.id === data['id']) {
                 if (this.id === data['tid']) {
                     self.status = true;
@@ -116,7 +120,7 @@ cc.Class({
             }
 
         });
-        g.io.on("game over", function (data) {
+        g.player.on("game over", function (data) {
             self.controlPanel.active = false;
             self.deletePokerNode('poker');
             self.deletePokerNode('targetPoker');

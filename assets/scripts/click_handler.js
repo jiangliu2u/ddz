@@ -14,7 +14,7 @@ cc.Class({
 
     onLoad: function () {
         this.control = this.Game.getComponent("game");
-        this.control.io = g.io;
+        // this.control.io = g.player;
     },
     //出牌，并向服务器发送数据，出牌的数据
     playPoker: function () {

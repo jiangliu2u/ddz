@@ -29,7 +29,7 @@ cc.Class({
     },
 
     joinRoom: function () {
-        g.io.emit("jointable", { 'name': this.roomname.string });
+        g.player.emit("jointable", { 'name': this.roomname.string });
         // cc.director.loadScene('Waiting');
     },
     start () {
