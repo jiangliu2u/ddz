@@ -22,7 +22,7 @@ Player.prototype = {
         this.socket.on(cmd, function (data) {
             if (callback) {
                 console.log(data);
-                callback(data, self);
+                callback(data);
             }
         });
     },

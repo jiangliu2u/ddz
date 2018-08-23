@@ -12,9 +12,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        selfFaceNode:{
-            default:null,
-            type:cc.Node
+        selfFaceNode: {
+            default: null,
+            type: cc.Node
         },
         leftFaceNode: {
             default: null,
@@ -24,37 +24,53 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        faceControllerPref:{
+        faceControllerPref: {
             default: null,
             type: cc.Prefab
         }
     },
 
     // LIFE-CYCLE CALLBACKS:
-    _initFace:function(){
+    _initFace: function (data) {
         //自己
+        switch (data["allPlayers"].length) {
+            case 0:
+                break;
+            case 1:
+                var faceItem = cc.instantiate(this.faceControllerPref);
+                faceItem.getComponent('facecontroller').initFace(data["allPlayers"][0], 9999, null);
+                this.leftFaceNode.addChild(faceItem);
+                faceItem.setPosition(cc.v2(0, 0));
+                break;
+            case 2:
+
+                var faceItem1 = cc.instantiate(this.faceControllerPref);
+                faceItem1.getComponent('facecontroller').initFace(data["allPlayers"][0], 12345, null);
+                this.rightFaceNode.addChild(faceItem1);
+                faceItem1.setPosition(cc.v2(0, 0));
+                var faceItem2 = cc.instantiate(this.faceControllerPref);
+                faceItem2.getComponent('facecontroller').initFace(data["allPlayers"][1], 9999, null);
+                this.leftFaceNode.addChild(faceItem2);
+                faceItem2.setPosition(cc.v2(0, 0));
+
+        }
+
+        //右边玩家
+
+
+        //左边玩家
+
+
+    },
+    onLoad() {
         var faceItem0 = cc.instantiate(this.faceControllerPref);
         faceItem0.getComponent('facecontroller').initFace("hehe", 67890, null);
         this.selfFaceNode.addChild(faceItem0);
         faceItem0.setPosition(cc.v2(0, 0));
-        //右边玩家
-        var faceItem1 = cc.instantiate(this.faceControllerPref);
-        faceItem1.getComponent('facecontroller').initFace("zxf", 12345, null);
-        this.rightFaceNode.addChild(faceItem1);
-        faceItem1.setPosition(cc.v2(0, 0));
-
-        //左边玩家
-        var faceItem2 = cc.instantiate(this.faceControllerPref);
-        faceItem2.getComponent('facecontroller').initFace("InitialJ", 9999, null);
-        this.leftFaceNode.addChild(faceItem2);
-        faceItem2.setPosition(cc.v2(0,0));
-        
-    },
-    onLoad () {
         //this._initFace();
     },
 
-    start () {
+    start() {
 
     },
 
