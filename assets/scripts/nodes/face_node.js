@@ -39,21 +39,21 @@ cc.Class({
                 case 0:
                     g.player.setSeatId(0);
                     break;
-                    case 1:
+                case 1:
                     g.player.setSeatId(1);
                     this._createLeft(data["allPlayers"][0]);
                     break;
-                    case 2:
+                case 2:
                     g.player.setSeatId(2);
                     this._createRight(data["allPlayers"][0]);
                     this._createLeft(data["allPlayers"][1]);
                     break;
-                }
+            }
             var faceItem0 = cc.instantiate(this.faceControllerPref);
-            faceItem0.getComponent('facecontroller').initFace(g.player.seatId+1, 67890, null);
+            faceItem0.getComponent('facecontroller').initFace(g.player.seatId + 1, 67890, null);
             this.selfFaceNode.addChild(faceItem0);
             faceItem0.setPosition(cc.v2(0, 0));
-            }
+        }
         //有新玩家加入时 
         if (data["index"]) {
             console.log("有新玩家加入...");
@@ -82,14 +82,14 @@ cc.Class({
         console.log("左边玩家");
 
         var faceItem4 = cc.instantiate(this.faceControllerPref);
-        faceItem4.getComponent('facecontroller').initFace(data["index"]+1, 9999, null);
+        faceItem4.getComponent('facecontroller').initFace(data["index"] + 1, 9999, null);
         this.leftFaceNode.addChild(faceItem4);
         faceItem4.setPosition(cc.v2(0, 0));
     },
     _createRight: function (data) {
         console.log("右边玩家");
         var faceItem3 = cc.instantiate(this.faceControllerPref);
-        faceItem3.getComponent('facecontroller').initFace(data["index"]+1, 12345, null);
+        faceItem3.getComponent('facecontroller').initFace(data["index"] + 1, 12345, null);
         this.rightFaceNode.addChild(faceItem3);
         faceItem3.setPosition(cc.v2(0, 0));
     },

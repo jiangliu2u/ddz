@@ -53,6 +53,7 @@ cc.Class({
             default: null,
             type: cc.SpriteAtlas
         },
+        value: null,
         selected: false
     },
 
@@ -114,8 +115,9 @@ cc.Class({
         // this.flip(false);
         // // return;
         // this.flip(true);
-        var self = this;
-        var type = this.getType(value);
+        this.value = value + '';
+        // console.log(value+'');
+        var type = this.getType(this.value);
         if (this._isJoker(type)) {
             //大小王的情况
             if (type === 4) {
@@ -171,11 +173,11 @@ cc.Class({
         }
         if (this.selected) {//取消选中
             this.selected = false;
-            this.node.y -= 10;
+            this.node.y -= 15;
         }
         else {//选中
             this.selected = true;
-            this.node.y += 10;
+            this.node.y += 15;
         }
 
     },

@@ -1,13 +1,4 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
+var common = require("../common/_init");
 /**
  * poker的大小是this._WIDTHX184
  * 两张poker的间距是this._MARGIN
@@ -134,7 +125,31 @@ cc.Class({
      * 出牌事件，参数是出去的牌
      */
     _onDiscard: function (pokers) {
-        console.log("_onDiscard: " + pokers);
+        console.log(pokers);
+        var pokersToDel = [];
+        for (var i = 0, len = pokers.length; i < len; i++) {
+            for (var j = 0; j < this.pokers.length; j++) {
+
+                if (pokers[i]._id === this.pokers[j]._id) {
+                    pokersToDel.push(this.pokers[j]);
+                    this.pokers.splice(j, 1);
+                    console.log("出一张删除一张");
+                }
+            }
+        }
+        var pInfo = [];
+        for(var i = 0;i<pokersToDel.length;i++){
+            pInfo.push(pokersToDel[i].getComponent("poker").value);
+            pokersToDel[i].destroy();
+        }
+        var msg = {
+            cmd:"discard",
+            playerId:g.player.id,
+            pokers:pInfo
+        };
+        this._neatenPokers(this.pokers);
+        g.player.sendMsg(common.EventType.MSG_DDZ_CHU_PAI,msg);
+        console.log(this.pokers);
 
 
     },
@@ -147,12 +162,24 @@ cc.Class({
             var pokerPrefab = cc.instantiate(this.poker);
             var script = pokerPrefab.getComponent("poker");
             script.initPoker(pokers[i]);
+            pokerPrefab._name = pokers[i] + "";
             pokerPrefab.setPosition(cc.v2(startPos + i * this._MARGIN, 0));
             this.node.addChild(pokerPrefab);
             this.pokers.push(pokerPrefab);
         }
     },
-
+    //整理牌
+    _neatenPokers:function(pokers){
+        var len = pokers.length;
+        var totalWidth = (len - 1) * this._MARGIN + this._WIDTH;
+        var startPos = -totalWidth / 2;
+        for (var i = 0;i<pokers.length;i++){
+            pokers[i].setPosition(cc.v2(startPos + i * this._MARGIN, 0));
+        }
+    },
+    _deletePokers: function () {
+        //todo
+    },
     _testInitPoker: function () {
 
         var pokers = [0x01, 0x20, 0x30, 0x01, 0x12, 0x12, 0x23, 0x34, 0x15, 0x26, 0x26, 0x27, 0x37, 0x08, 0x29, 0x3A, 0x1B, 0x1C, 0x4D, 0x5E]
@@ -166,25 +193,25 @@ cc.Class({
      */
 });
 let test;
-(function(test) {
-    test.bind = function(pokerPanel) {
+(function (test) {
+    test.bind = function (pokerPanel) {
         // 在pokerPanel中调用这个方法绑定已下 test.bind(this);
         test.pokerPanel = pokerPanel;
     };
-    test.discard = function(pokers) {
+    test.discard = function (pokers) {
         // 直接调用这个pokerPanel的出牌方法。这样在console里面就可以测试你的UI表现了。写法比较随意
         test.pokerPanel.discard(pokers);
     }
-    test.discard1 = function(msg) {
+    test.discard1 = function (msg) {
         // 或者在这里trigger一个消息   
         // 这种方式是模拟服务器的消息。所以更好点。
         if (msg === undfined || msg === null) {
             msg = {
                 'cmd': 'chupai',
-                'pokers': [0x13,0x13]
+                'pokers': [0x13, 0x13]
             };
         }
-        
+
         EventDispatcher.trigger('这里是出牌时间对应的事件类型', msg);
     }
 })(test || (test = {}));

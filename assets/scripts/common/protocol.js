@@ -38,8 +38,8 @@ const common = require('_init');
             });
         },
         _onChupai:function(){
-            g.player.register(common.EventType.MSG_DDZ_CHUPAI, function (data) {
-                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CHUPAI, data);
+            g.player.register(common.EventType.MSG_DDZ_CHU_PAI, function (data) {
+                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CHU_PAI, data);
             });
         },
         _onTest: function () {

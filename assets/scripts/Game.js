@@ -1,6 +1,6 @@
-const config = require('config');
-const PokerPlay = require('poker_handler');
-const Util = require('util');
+const config = require('./common/config');
+const PokerPlay = require('./poker/poker_handler');
+const Util = require('./common/util');
 const common = require("./common/_init");
 cc.Class({
     extends: cc.Component,
@@ -53,15 +53,15 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-
+        cc.debug.setDisplayStats(false);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.createFace, this);
-        
+
         // common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
         //以下加入房间，桌子id设置为1，后续可根据点击的桌子id进入指定房间
         g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE, { cmd: "join", tableId: 1, player: g.player.id });
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CHUPAI, this._createHandedOutPoker, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CHU_PAI, this._createHandedOutPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
-        this._setControlPanelVisible(false);
+        this._setControlPanelVisible(this.status);
         common.Protocol.init();
         return;
 
@@ -140,8 +140,9 @@ cc.Class({
     _updateDipai(pokers) {
 
     },
-    _setControlPanelVisible(show) {
-        this.controlPanel.active = show;
+    _setControlPanelVisible() {
+        var cp = this.controlPanel.getComponent("control_panel");
+        cp.setVisible(this.status);
     },
     _createDipai: function (pokers) {
 
@@ -186,16 +187,17 @@ cc.Class({
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         pokerPanel._createPokers(pokers);
         if (pokers.length === 20) {
-            this._setControlPanelVisible(true);
+            this.status =true;
+            this._setControlPanelVisible();
         }
 
     },
     //显示玩家出的牌
     _createHandedOutPoker: function (data) {
-        console.log(data['index']+"出牌");
+        console.log(data['seatId'] + "出牌");
         this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
-        hop._createHandedOutPoker(data['pokers'],data['index']);
+        hop._createHandedOutPoker(data);
     },
 
     //获取选中的牌，不符合规定的牌型则无返回值

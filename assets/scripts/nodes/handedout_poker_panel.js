@@ -1,13 +1,3 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
 cc.Class({
     extends: cc.Component,
 
@@ -37,26 +27,38 @@ cc.Class({
         this._H = 92;
     },
     // onLoad () {},
-    _createHandedOutPoker: function (pokers, index) {
-        switch (index) {
-            case 0: {
-                this.showPokers(pokers, this.selfPanel);
+    _createHandedOutPoker: function (msg) {
+        console.log(msg);
+        switch (msg["seatId"]) {
+            case 0:
+                if (g.player.seatId === 1) {
+                    this.showPokers(msg["pokers"], this.leftPanel);
+
+                } else {
+                    this.showPokers(msg["pokers"], this.rightPanel);
+                }
                 break;
-            }
-            case 1: {
-                this.showPokers(pokers, this.leftPanel);
+            case 1:
+                if (g.player.seatId === 0) {
+                    this.showPokers(msg["pokers"], this.rightPanel);
+
+                } else {
+                    this.showPokers(msg["pokers"], this.leftPanel);
+                }
                 break;
-            }
-            case 2: {
-                this.showPokers(pokers, this.rightPanel);
+            case 2:
+                if (g.player.seatId === 0) {
+                    this.showPokers(msg["pokers"], this.leftPanel);
+
+                } else {
+                    this.showPokers(msg["pokers"], this.rightPanel);
+                }
                 break;
-            }
         }
+        
     },
     showPokers(pokers, panelNode) {
         var len = pokers.length;
-        console.log(this._W);
-        console.log(this._M);
         var totalWidth = (len - 1) * this._M + this._W;
         var startPos = -totalWidth / 2;
         for (var i = 0; i < len; i++) {

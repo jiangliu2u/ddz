@@ -1,6 +1,6 @@
 window.g = {};
-const common = require('_init');
-const Player = require("./player");
+const common = require('./common/_init');
+const Player = require("./common/player");
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -30,11 +30,12 @@ cc.Class({
         }
     },
     onLoad: function () {
+        cc.debug.setDisplayStats(false);
         this.loadingMask.active = false;
         if (cc.sys.isNative) {
            var io = SocketIO;
         } else {
-            var io = require('socket.io');
+            var io = require('./common/socket.io');
         }
 
         // first scene - cocos loading
