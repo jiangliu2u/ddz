@@ -169,3 +169,25 @@ cc.Class({
      * 2. 动态排版的功能
      */
 });
+let test;
+(function(test) {
+    test.bind = function(pokerPanel) {
+        test.pokerPanel = pokerPanel;
+    };
+    test.discard = function(pokers) {
+        // 直接调用这个pokerPanel的出牌方法。这样在console里面就可以测试你的UI表现了。写法比较随意
+        test.pokerPanel.discard(pokers);
+    }
+    test.discard1 = function(msg) {
+        // 或者在这里trigger一个消息   
+        // 这种方式是模拟服务器的消息。所以更好点。
+        if (msg === undfined || msg === null) {
+            msg = {
+                'cmd': 'chupai',
+                'pokers': [0x13,0x13]
+            };
+        }
+        
+        EventDispatcher.trigger('这里是出牌时间对应的事件类型', msg);
+    }
+})(test || (test = {}));
