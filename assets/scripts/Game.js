@@ -54,24 +54,15 @@ cc.Class({
 
     onLoad: function () {
 
-        // this._createDipai([0x10, 0x4D, 0x5E]);
-        //this._createHandedOutPoker([0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x12, 0x13, 0x23, 0x22, 0x25, 0x12, 0x13, 0x23, 0x22, 0x25], 2);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE,this.createFace,this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.createFace, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
         common.Protocol.init();
-        var self = this;
-        g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE,{cmd:"join",tableId:1,player:g.player.id});
-        g.player.register(common.EventType.MSG_DDZ_ENTER_TABLE,function(data){
-            common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE,data);
-        });
-        g.player.register(common.EventType.MSG_DDZ_DEAL_POKER,function(data){
-            // self._createHandPoker(data);
-            common.EventDispatcher.trigger(common.EventType.MSG_DDZ_DEAL_POKER,data);
-        });
+        //以下加入房间，桌子id设置为1，后续可根据点击的桌子id进入指定房间
+        g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE, { cmd: "join", tableId: 1, player: g.player.id });
+        this._setControlPanelVisible(false);
         return;
 
-        this.controlPanel.active = false;
         this.targetList = null;
         // if (cc.sys.isNative) {
         //     io = SocketIO;
@@ -147,7 +138,9 @@ cc.Class({
     _updateDipai(pokers) {
 
     },
-
+    _setControlPanelVisible(show) {
+        this.controlPanel.active = show;
+    },
     _createDipai: function (pokers) {
 
         for (var i = 0; i < pokers.length; i++) {
@@ -187,7 +180,7 @@ cc.Class({
     },
     createFace: function (data) {
         console.log('create face');
-        console.log(data);
+        // console.log(data);
         this.faceNodes.getComponent("face_node")._initFace(data);
     },
 
@@ -195,8 +188,11 @@ cc.Class({
     //创建手牌
     _createHandPoker: function (pokers) {
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
-        pokerPanel._createPokers(pokers)
-        
+        pokerPanel._createPokers(pokers);
+        if (pokers.length === 20) {
+            this._setControlPanelVisible(true);
+        }
+
     },
     //显示玩家出的牌
     _createHandedOutPoker: function (pokers, index) {

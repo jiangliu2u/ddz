@@ -24,7 +24,7 @@ cc.Class({
     },
 
     onLoad () {
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
+        //common.EventDispatcher.listen(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
     },
 
     setOnClickCallback(callback) {

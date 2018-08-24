@@ -15,14 +15,12 @@ const common = require('_init');
 
             this._onEnterTable();
             this._onCreateRoom();
-            // this._onTest();
+            this._onDealPoker();
 
         },
 
         _onCreateRoom: function () {
             g.player.register('create room', function (data) {
-                console.log(data);
-                console.log('hahah');
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CREATE_ROOM, data);
             });
         },
@@ -30,8 +28,12 @@ const common = require('_init');
         _onEnterTable: function() {
             console.log("_onEnterTable");
             g.player.register('MSG_DDZ_ENTER_TABLE', function (data) {
-                console.log(data);
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE, data);
+            });
+        },
+        _onDealPoker:function(){
+            g.player.register(common.EventType.MSG_DDZ_DEAL_POKER, function (data) {
+                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_DEAL_POKER, data);
             });
         },
         _onTest: function () {

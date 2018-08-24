@@ -3,7 +3,7 @@ function Player(socket) {
     this.id = this.socket.id;
     this.accountId = Player.ID;
     Player.ID++;
-
+    this.seatId=null;
     this.nickName = "jdakfdja;";
     this.coin = Math.random() * 10000;
     this.gender = Player.GENDER.SECRET;
@@ -21,11 +21,13 @@ Player.prototype = {
         var self = this;
         this.socket.on(cmd, function (data) {
             if (callback) {
-                console.log(data);
                 callback(data);
             }
         });
     },
+    setSeatId(id){
+        this.seatId = id;
+    }
 };
 Player.GENDER = {
     MALE: 1,
