@@ -55,12 +55,14 @@ cc.Class({
     onLoad: function () {
 
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.createFace, this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
-        common.Protocol.init();
+        
+        // common.EventDispatcher.listen(common.EventType.MSG_DDZ_YOUR_TURN, this._createHandedOutPoker, this);
         //以下加入房间，桌子id设置为1，后续可根据点击的桌子id进入指定房间
         g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE, { cmd: "join", tableId: 1, player: g.player.id });
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CHUPAI, this._createHandedOutPoker, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         this._setControlPanelVisible(false);
+        common.Protocol.init();
         return;
 
         this.targetList = null;
@@ -153,12 +155,6 @@ cc.Class({
         }
     },
 
-    _testCreateFaces: function () {
-        this.onPlayerEnterRoom({ seatId: 0, name: 'zxf', coin: 1234 });
-        this.onPlayerEnterRoom({ seatId: 1, name: 'zxf', coin: 444 });
-        this.onPlayerEnterRoom({ seatId: 2, name: 'zxf', coin: 33 });
-    },
-
     onPlayerEnterRoom: function (player) {
         var name = player.name;
         var coin = player.coin;
@@ -195,10 +191,11 @@ cc.Class({
 
     },
     //显示玩家出的牌
-    _createHandedOutPoker: function (pokers, index) {
+    _createHandedOutPoker: function (data) {
+        console.log(data['index']+"出牌");
         this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
-        hop._createHandedOutPoker(pokers, index);
+        hop._createHandedOutPoker(data['pokers'],data['index']);
     },
 
     //获取选中的牌，不符合规定的牌型则无返回值

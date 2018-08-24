@@ -16,6 +16,7 @@ const common = require('_init');
             this._onEnterTable();
             this._onCreateRoom();
             this._onDealPoker();
+            this._onChupai();
 
         },
 
@@ -34,6 +35,11 @@ const common = require('_init');
         _onDealPoker:function(){
             g.player.register(common.EventType.MSG_DDZ_DEAL_POKER, function (data) {
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_DEAL_POKER, data);
+            });
+        },
+        _onChupai:function(){
+            g.player.register(common.EventType.MSG_DDZ_CHUPAI, function (data) {
+                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_CHUPAI, data);
             });
         },
         _onTest: function () {
