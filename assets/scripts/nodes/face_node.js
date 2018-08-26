@@ -33,36 +33,48 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     _initFace: function (data) {
         //自己
+        console.log(data["allPlayers"]);
+        if (data["allPlayers"] === undefined && data["seatId"] === undefined) {
+            g.player.setSeatId(0);
+            console.log("all players空的自己的座位号" + 0);
+            g.handedoutPokers = { seatId: 0, pokers: [] };
+        }
         if (data["allPlayers"]) {//加入桌子时获取已经加入的玩家
             console.log("获取已经加入的玩家...");
             switch (data["allPlayers"].length) {
                 case 0:
+                    //没执行
                     g.player.setSeatId(0);
+                    g.handedoutPokers = { seatId: 0, pokers: [] };
+                    console.log("case 0 获取已经加入的玩家，自己的座位号" + 0);
                     break;
                 case 1:
                     g.player.setSeatId(1);
+                    g.handedoutPokers = { seatId: 1, pokers: [] };
+
+                    console.log("case 1 获取已经加入的玩家，自己的座位号" + 1);
                     this._createLeft(data["allPlayers"][0]);
                     break;
                 case 2:
                     g.player.setSeatId(2);
+                    g.handedoutPokers = { seatId: 2, pokers: [] };
+                    console.log("case 2 获取已经加入的玩家，自己的座位号" + 2);
                     this._createRight(data["allPlayers"][0]);
                     this._createLeft(data["allPlayers"][1]);
                     break;
             }
-            var faceItem0 = cc.instantiate(this.faceControllerPref);
-            faceItem0.getComponent('facecontroller').initFace(g.player.seatId + 1, 67890, null);
-            this.selfFaceNode.addChild(faceItem0);
-            faceItem0.setPosition(cc.v2(0, 0));
+
         }
-        //有新玩家加入时 
-        if (data["index"]) {
+        if (data["seatId"]) {
             console.log("有新玩家加入...");
             console.log(data);
-            switch (data["index"]) {
+            switch (data["seatId"]) {
                 case 1:
+                    console.log("case 1 新玩家加入，自己的座位号" + g.player.seatId);
                     this._createRight(data);
                     break;
                 case 2:
+                    console.log("case 2 新玩家加入，自己的座位号" + g.player.seatId);
                     if (g.player.seatId === 0) {
                         this._createLeft(data);
                     }
@@ -71,8 +83,6 @@ cc.Class({
                     }
                     console.log("第三个玩家");
                     console.log(data);
-
-                    console.log("显示第三个玩家");
                     break;
             }
         }
@@ -82,16 +92,23 @@ cc.Class({
         console.log("左边玩家");
 
         var faceItem4 = cc.instantiate(this.faceControllerPref);
-        faceItem4.getComponent('facecontroller').initFace(data["index"] + 1, 9999, null);
+        faceItem4.getComponent('facecontroller').initFace("leftPName" + 1,99999, 2);
         this.leftFaceNode.addChild(faceItem4);
         faceItem4.setPosition(cc.v2(0, 0));
     },
     _createRight: function (data) {
         console.log("右边玩家");
         var faceItem3 = cc.instantiate(this.faceControllerPref);
-        faceItem3.getComponent('facecontroller').initFace(data["index"] + 1, 12345, null);
+        faceItem3.getComponent('facecontroller').initFace("rightPName", 99999, 3);
         this.rightFaceNode.addChild(faceItem3);
         faceItem3.setPosition(cc.v2(0, 0));
+    },
+    createSelf(data) {
+        console.log("自己");
+        var faceItem3 = cc.instantiate(this.faceControllerPref);
+        faceItem3.getComponent('facecontroller').initFace("selfName", 99999, 1);
+        this.selfFaceNode.addChild(faceItem3);
+        faceItem3.setPosition(cc.v2(0, 0))
     },
     onLoad() {
         // ar faceItem0 = cc.instantiate(this.faceControllerPref);

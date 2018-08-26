@@ -1,14 +1,20 @@
 const common = require('_init');
 
-(function (common){
+(function (common) {
     var EventType = {
         // 大类在前，用_分割
-
+        /**
+             * 发送的data格式{cmd:"",playerId:socket.id,pokers:[]}
+             * 接收的data格式{seatId:1,pokers:[]}
+             */
         MSG_DDZ_ENTER_TABLE: "MSG_DDZ_ENTER_TABLE",
-        MSG_DDZ_CREATE_ROOM: "MSG_DDZ_CREATE_ROOM",
-        MSG_DDZ_DEAL_POKER: "MSG_DDZ_DEAL_POKER",
-        MSG_DDZ_CHU_PAI: "MSG_DDZ_CHU_PAI",
-        MSG_DDZ_YOUR_TURN: "MSG_DDZ_YOUR_TURN",
+        MSG_DDZ_ALL_PLAYERS: "MSG_DDZ_ALL_PLAYERS",
+        MSG_DDZ_ALL_TABLES: "MSG_DDZ_ALL_TABLES",
+        MSG_DDZ_PLAYER_CONNECTED: "MSG_DDZ_PLAYER_CONNECTED",
+        MSG_DDZ_DEAL_POKER: "MSG_DDZ_DEAL_POKER",//发牌事件
+        MSG_DDZ_DISCARD: "MSG_DDZ_DISCARD",
+        MSG_DDZ_PASS: "MSG_DDZ_PASS",
+        MSG_DDZ_GAME_OVER: "MSG_DDZ_GAME_OVER",
         MSG_DDZ_START_GAME: "MSG_DDZ_START_GAME",
 
     };

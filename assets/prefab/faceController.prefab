@@ -80,7 +80,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 600,
+    "_localZOrder": 138,
     "groupIndex": 0,
     "_id": ""
   },
@@ -175,7 +175,7 @@
     "_atlas": {
       "__uuid__": "f4f9d59d-0844-4ef0-a9a7-dc582448a797"
     },
-    "_id": "3eOT8IkF1Gd4HHms65bleS"
+    "_id": "35+CPlFd1La5C7fgvkHzSd"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -279,7 +279,7 @@
     "_atlas": {
       "__uuid__": "166ac4d1-0d45-489a-b7bf-3548f56d6c43"
     },
-    "_id": "bejIafX19In51+h3Ydml7Z"
+    "_id": "cc0A5/ryNJU6cMrgMs1qTg"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -378,7 +378,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
-    "_id": "8fjKShNhZIBI+xc/rixpyJ"
+    "_id": "d82PKpEJVB/pFXWZVd6LFq"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -419,8 +419,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 69.14,
-      "height": 20.43
+      "width": 61.18,
+      "height": 26
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -470,16 +470,14 @@
     "_fontSize": 22,
     "_lineHeight": 26,
     "_enableWrapText": true,
-    "_N$file": {
-      "__uuid__": "b1d9a7ae-c02a-4478-bdab-13fe24b78b20"
-    },
-    "_isSystemFontUsed": false,
+    "_N$file": null,
+    "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
-    "_id": "3csRGcY4NOVrucLYxwBQK2"
+    "_id": "67VvUYdSlKbrXIoutFyvxD"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -505,13 +503,13 @@
         "__uuid__": "d798347b-7186-41bb-b956-9584e091731b"
       },
       {
-        "__uuid__": "147aa741-942e-4888-ac39-c879101c6529"
+        "__uuid__": "51cc8281-8aec-4e25-a8e7-8a6e16c8f350"
       },
       {
-        "__uuid__": "92ef88e0-c709-4995-ab4a-ec26aab796ea"
+        "__uuid__": "cf96cbfc-d4bb-4958-adad-d56b9e3be37e"
       },
       {
-        "__uuid__": "5570ab0e-31eb-4c32-9d7f-cac09fca0fb0"
+        "__uuid__": "3664222c-d7e7-4b97-bc84-fa727cbd8c4f"
       }
     ],
     "nameLbl": {
@@ -523,7 +521,7 @@
     "faceSpr": {
       "__id__": 6
     },
-    "_id": "3eDNSn74FDu7NBoOzL4K52"
+    "_id": "40FfP0U7tESqj4YshRbbfP"
   },
   {
     "__type__": "cc.PrefabInfo",

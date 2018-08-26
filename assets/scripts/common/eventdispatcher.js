@@ -6,7 +6,7 @@ const common = require('_init');
 
         _eventMap: {},
 
-        listen: function(eventName, handler, scope) {
+        listen: function (eventName, handler, scope) {
             if (!eventName) {
                 console.error("event name is undefined!");
                 return;
@@ -16,6 +16,7 @@ const common = require('_init');
                 return;
             }
 
+
             this._eventMap[eventName] = this._eventMap[eventName] || [];
             this._eventMap[eventName].push({
                 handler: handler,
@@ -23,18 +24,20 @@ const common = require('_init');
             });
         },
 
-        trigger: function(eventName, params) {
+        trigger: function (eventName, params) {
             if (!eventName) {
+                console.log(eventName);
+
                 console.error("event name is undefined!");
                 return;
             }
             var events = this._eventMap[eventName];
             if (!events) {
+                console.log(eventName);
                 console.error("events is undefined!");
                 return;
             }
-
-            for(var i = 0, len = events.length; i < len; i++) {
+            for (var i = 0, len = events.length; i < len; i++) {
                 var event = events[i];
                 var handler = event.handler;
                 if (handler) {
@@ -43,7 +46,7 @@ const common = require('_init');
             }
         },
 
-        ignore: function(eventName, handler, scope) {
+        ignore: function (eventName, handler, scope) {
             var events = this._eventMap[eventName];
 
             if (!events) {
@@ -51,7 +54,7 @@ const common = require('_init');
             }
 
             var len = events.length;
-            for(var i = len - 1; i >= 0; i--) {
+            for (var i = len - 1; i >= 0; i--) {
                 var event = events[i];
 
                 // todo 测试一下，是否可以将这个handler去掉

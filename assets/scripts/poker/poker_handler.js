@@ -1,5 +1,5 @@
-const PokerTypeHandler = require('poker_type_handler');
-const Util = require('util');
+const PokerTypeHandler = require('./poker_type_handler');
+const Util = require('../common/util');
 
 function PokerMap() {//统计各种牌的数量
     this.size();
@@ -15,7 +15,8 @@ PokerMap.prototype.size = function () {
     return size;
 };
 
-function PokerWrapper(pokerList) {//出的一手牌的包装类，包括牌型，数量以及开始的牌大小
+//出的一手牌的包装类，包括牌型，数量以及开始的牌大小
+function PokerWrapper(pokerList) {
     this.size = pokerList.length;
     this.srcPoker = pokerList;
     this.headValue;
@@ -27,15 +28,14 @@ PokerWrapper.prototype.follow = function (targetPokerList) {
         return true;
     }
     let targetWrapper = new PokerPlay().getPokerWrapper(targetPokerList);
-    if ((this.pokerType == targetWrapper.pokerType) && (this.size == targetWrapper.size) &&
-        (Util.pokerGrade[this.headValue] > Util.pokerGrade[targetWrapper.headValue])) {
-        //要出的牌与目标牌牌型和张数相同，且起始值大于目标牌，可以跟牌
+    console.log("this.headValue  "+this.headValue);
+    console.log("targetWrapper.headValue  " + targetWrapper.headValue);
+    console.log(this.pokerType +' type '+ targetWrapper.pokerType);
+    console.log(this.size +' size '+ targetWrapper.size);
+    console.log(this.headValue > targetWrapper.headValue);
+    if ((this.pokerType === targetWrapper.pokerType) && (this.size === targetWrapper.size) && (this.headValue > targetWrapper.headValue)) {
         return true;
-    } else if (this.pokerType == "zhadan" && targetWrapper.pokerType != "zhadan" && targetWrapper.pokerType != "wangzha") {
-        //要出的牌是炸弹且目标牌不是炸弹也不是王炸，可以跟牌
-        return true;
-    }
-    else {
+    } else {
         return false;
     }
 };
@@ -48,7 +48,7 @@ PokerPlay.prototype.getPokerWrapper = function (pokerList) {
     if (!pokerList || pokerList.length == 0)
         throw 'wrong poker length';
     let pokerWrapper = new PokerWrapper(pokerList);
-    if (pokerList.length == 2 && pokerList[0]['showTxt'] == 'g' && pokerList[1]['showTxt'] == "G") {//两张时判断是不是王炸
+    if (pokerList.length == 2 && (pokerList[0] >> 4) == 4 && (pokerList[1] >> 4) == 5) {
         pokerWrapper.headValue = 'g';
         pokerWrapper.pokerType = "wangzha";
         return pokerWrapper;
@@ -56,11 +56,11 @@ PokerPlay.prototype.getPokerWrapper = function (pokerList) {
     let pokerMap = new PokerMap();
     for (let i = 0; i < pokerList.length; i++) {
         let poker = pokerList[i];
-        let count = pokerMap[poker.showTxt];//不同数值牌的数量
+        let count = pokerMap[poker & 15];//不同数值牌的数量
         if (!count) {
             count = 0;
         }
-        pokerMap[poker.showTxt] = ++count;
+        pokerMap[poker & 15] = ++count;
     }
     let countList = [];// 每张相同牌值的数量数组
     for (let pokerValue in pokerMap) {
@@ -72,37 +72,39 @@ PokerPlay.prototype.getPokerWrapper = function (pokerList) {
         return b - a;
     });
 
-    // console.log('countList: ' + JSON.stringify(countList));
     let type = '';
     for (let i = 0; i < countList.length; i++) {
         var count = countList[i];
         if (count > 4)
             throw 'wrong poker type';
+
         type += count + '';
     }
-    type = type.replace(/1/g, 'a');//
+    console.log(type);
+    type = type.replace(/1/g, 'a');
     type = type.replace(/2/g, 'b');
     type = type.replace(/3/g, 'c');
     type = type.replace(/4/g, 'd');
     // 处理顺子，可能大于5个，使等于5个
-    let pattern = /a+/g;//正则
-    // console.log('type: ' + type);
+    let pattern = /a+/g;
     let array = pattern.exec(type);
-    if (array && array[0].length == type.length && type.length > 5) { type = 'aaaaa'; }
-
-    // console.log('type2: ' + type);
+    if (array && array[0].length === type.length && type.length > 5)
+        type = 'aaaaa';
 
     // 处理连对，大于3对时使其等于3对
     let pattern2 = /b+/g;
     let array2 = pattern2.exec(type);
-    if (array2 && array2[0].length == type.length && type.length > 3) { type = 'bbb'; }
+    if (array2 && array2[0].length === type.length && type.length > 3)
+        type = 'bbb';
+    console.log('type:' + type);
     pokerWrapper.pokerType = Util.pokerType[type];
     let pokerTypeHandler = new PokerTypeHandler();
     try {
         return pokerTypeHandler[Util.pokerType[type]](pokerMap, pokerWrapper);
     }
     catch (err) {
-        throw Util.EXCEPTION.WRONG_POKER_TYPE;
+        console.log(err);
+        // throw Util.EXCEPTION.WRONG_POKER_TYPE;
     }
 };
 module.exports = PokerPlay;

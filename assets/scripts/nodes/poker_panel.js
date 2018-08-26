@@ -72,7 +72,6 @@ cc.Class({
         if (len === 0) {
             return [];
         }
-
         var selectedPokers = [];
         for (var i = 0; i < len; i++) {
             var poker = this.pokers[i];
@@ -81,7 +80,6 @@ cc.Class({
                 selectedPokers.push(poker);
             }
         }
-
         return selectedPokers;
     },
 
@@ -133,27 +131,35 @@ cc.Class({
                 if (pokers[i]._id === this.pokers[j]._id) {
                     pokersToDel.push(this.pokers[j]);
                     this.pokers.splice(j, 1);
-                    console.log("出一张删除一张");
                 }
             }
         }
         var pInfo = [];
-        for(var i = 0;i<pokersToDel.length;i++){
+        for (var i = 0; i < pokersToDel.length; i++) {
             pInfo.push(pokersToDel[i].getComponent("poker").value);
             pokersToDel[i].destroy();
         }
         var msg = {
-            cmd:"discard",
-            playerId:g.player.id,
-            pokers:pInfo
+            cmd: "discard",
+            playerId: g.player.id,
+            pokers: pInfo
         };
+        g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
         this._neatenPokers(this.pokers);
-        g.player.sendMsg(common.EventType.MSG_DDZ_CHU_PAI,msg);
-        console.log(this.pokers);
+        g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
+        if(this.pokers.length===0){
+            g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER,{cmd:"gameover",playerId:g.player.id});
+            cc.find("Canvas").getComponent("Game").hehe();
+        }
+
 
 
     },
+    _onPass() {
+        g.player.sendMsg(common.EventType.MSG_DDZ_PASS, { cmd: "pass", playerId: g.player.id });
 
+    },
+    //发牌时显示手牌
     _createPokers: function (pokers) {
         var len = pokers.length;
         var totalWidth = (len - 1) * this._MARGIN + this._WIDTH;
@@ -169,11 +175,11 @@ cc.Class({
         }
     },
     //整理牌
-    _neatenPokers:function(pokers){
+    _neatenPokers: function (pokers) {
         var len = pokers.length;
         var totalWidth = (len - 1) * this._MARGIN + this._WIDTH;
         var startPos = -totalWidth / 2;
-        for (var i = 0;i<pokers.length;i++){
+        for (var i = 0; i < pokers.length; i++) {
             pokers[i].setPosition(cc.v2(startPos + i * this._MARGIN, 0));
         }
     },
@@ -207,7 +213,7 @@ let test;
         // 这种方式是模拟服务器的消息。所以更好点。
         if (msg === undfined || msg === null) {
             msg = {
-                'cmd': 'chupai',
+                'cmd': 'discard',
                 'pokers': [0x13, 0x13]
             };
         }

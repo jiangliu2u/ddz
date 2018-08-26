@@ -14,7 +14,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        
+        tableId: null,
+        showedId:{
+            default:null,
+            type:cc.Label
+        }
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -23,33 +28,24 @@ cc.Class({
         this._onClickCallback = null;
     },
 
-    onLoad () {
+    onLoad() {
         //common.EventDispatcher.listen(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
     },
-
+    onClick(){
+        g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE, { cmd: "join", tableId: this.tableId, playerId: g.player.id });
+        cc.director.loadScene("Game");
+    },
     setOnClickCallback(callback) {
         this._onClickCallback = callback;
     },
-
+    setTableId(id) {
+        this.tableId = id;
+        this.showedId.string = id;
+    },
     onCreateRoom(data) {
         //cc.director.loadScene('Game');
     },
 
-    // createRoom: function () {
-    //     console.log('创建房间！');
-    //     g.player.emit("create room", { 'name': this.id });
-    //     if (this._onClickCallback) {
-    //         this._onClickCallback();
-    //     }
-    //     // cc.director.loadScene('Game');
-
-    //     // g.player.on('create room', function (data) {
-    //     //     console.log(data);
-    //     //     common.EventDispatcher.trigger(ddz.EventType.MSG_DDZ_ENTER_TABLE, data);
-    //     // });
-
-    // },
-    
     start() {
 
     },

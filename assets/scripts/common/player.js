@@ -1,3 +1,4 @@
+var common = require("./_init");
 function Player(socket) {
     this.socket = socket;
     this.id = this.socket.id;
@@ -17,7 +18,6 @@ Player.prototype = {
     },
 
     register: function (cmd, callback) {
-        console.log("player register");
         var self = this;
         this.socket.on(cmd, function (data) {
             if (callback) {
@@ -27,6 +27,9 @@ Player.prototype = {
     },
     setSeatId(id){
         this.seatId = id;
+    },
+    connected(data){
+        common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ALL_TABLES,data);
     }
 };
 Player.GENDER = {

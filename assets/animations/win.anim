@@ -2,10 +2,10 @@
   "__type__": "cc.AnimationClip",
   "_name": "win",
   "_objFlags": 0,
-  "_rawFiles": null,
+  "_native": "",
   "_duration": 0.09803921568627451,
   "sample": 51,
-  "speed": 0.3,
+  "speed": 0.2,
   "wrapMode": 1,
   "curveData": {
     "props": {
@@ -14,7 +14,7 @@
           "frame": 0,
           "value": [
             0,
-            583
+            1039
           ]
         },
         {
@@ -23,6 +23,24 @@
             0,
             0
           ]
+        }
+      ],
+      "scale": [
+        {
+          "frame": 0,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "frame": 0.09803921568627451,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
         }
       ]
     }

@@ -26,11 +26,11 @@ cc.Class({
         
     },
 
-    initFace: function(name, coin, face) {
+    initFace: function(name, coin, num) {
         this.nameLbl.string = name;
         this.coinLbl.string = coin + '';
         // var spriteFrame =
-        this.faceSpr.spriteFrame = this.FACE_MAP[0];
+        this.faceSpr.spriteFrame = this.FACE_MAP[num];
     },
 
     start () {

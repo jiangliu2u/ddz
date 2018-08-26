@@ -12,25 +12,29 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        roomname: {
-            default: null,
-            type: cc.Label
+        tableScrollView:{
+            default:null,
+            type:cc.ScrollView
         },
+        table: {
+            default: null,
+            type: cc.Prefab
+        },
+        
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-    },
-
-    onEnterTable(params) {
-        console.log("received jointable success");
-        cc.director.loadScene('Game');
-    },
-
-    joinRoom: function () {
-        g.player.emit("jointable", { 'name': this.roomname.string });
-        // cc.director.loadScene('Waiting');
+    //onLoad () {},
+    init: function (data) {
+        var tables = data["tables"];
+        console.log(tables);
+        var self = this;
+        for (let i = 0, len = tables.length; i < len; i++) {
+            let item = cc.instantiate(this.table);
+            item.getComponent('table').setTableId(tables[i]);
+            this.tableScrollView.content.addChild(item);
+        }
     },
     start () {
 
