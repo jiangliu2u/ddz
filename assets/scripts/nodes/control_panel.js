@@ -21,11 +21,11 @@ cc.Class({
 
     },
     setVisible(v) {
-        if(v){
+        if (v) {
             var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
-            hop.hideHandedoutPokers(hop.selfPanel);
+            hop.hideSelf();
         }
-        this.node.active = v
+        this.node.active = v;
     },
     //出牌
     discard() {
@@ -53,7 +53,7 @@ cc.Class({
 
             if (g.player.seatId === g.handedoutPokers["seatId"]) {
                 if (pl_wrapper) {
-                    console.log("别人要不起你的牌");
+                    console.log("别人不起你的牌");
                     pp._onDiscard(pokers);
                     this.setVisible(false);
                     this.showSelfHandeOutPoker(ps);
@@ -83,12 +83,12 @@ cc.Class({
     },
     //不要
     pass() {
-        if (g.handedoutPokers["pokers"].length==0) {
+        if (g.handedoutPokers["pokers"].length == 0) {
             console.log("你是第一个出牌，不能不要");
         } else {
-            if(g.handedoutPokers["seatId"]===g.player.seatId){
+            if (g.handedoutPokers["seatId"] === g.player.seatId) {
                 console.log("别人都不要，该你出牌了，不能不要");
-            }else{
+            } else {
                 var pp = this.pokerPanel.getComponent("poker_panel");
                 pp._onPass();
                 console.log("不要");
@@ -105,6 +105,7 @@ cc.Class({
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop.hideHandedoutPokers(hop.leftPanel);
     },
+    
 
     start() {
 

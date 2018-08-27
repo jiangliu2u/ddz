@@ -1,4 +1,4 @@
-const Util = require("../click_handler/util");
+const Util = require('../common/util');
 function PokerTypeHandler() {
 }
 

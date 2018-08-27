@@ -23,12 +23,9 @@ cc.Class({
         
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
     //onLoad () {},
     init: function (data) {
         var tables = data["tables"];
-        console.log(tables);
         var self = this;
         for (let i = 0, len = tables.length; i < len; i++) {
             let item = cc.instantiate(this.table);

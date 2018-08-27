@@ -127,7 +127,6 @@ cc.Class({
         var pokersToDel = [];
         for (var i = 0, len = pokers.length; i < len; i++) {
             for (var j = 0; j < this.pokers.length; j++) {
-
                 if (pokers[i]._id === this.pokers[j]._id) {
                     pokersToDel.push(this.pokers[j]);
                     this.pokers.splice(j, 1);
@@ -149,7 +148,7 @@ cc.Class({
         g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if(this.pokers.length===0){
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER,{cmd:"gameover",playerId:g.player.id});
-            cc.find("Canvas").getComponent("Game").hehe();
+            cc.find("Canvas").getComponent("Game").endGame({team:g.player.team});
         }
 
 
@@ -157,7 +156,6 @@ cc.Class({
     },
     _onPass() {
         g.player.sendMsg(common.EventType.MSG_DDZ_PASS, { cmd: "pass", playerId: g.player.id });
-
     },
     //发牌时显示手牌
     _createPokers: function (pokers) {

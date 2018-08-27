@@ -3,28 +3,12 @@
   "_name": "win",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.09803921568627451,
-  "sample": 51,
-  "speed": 0.2,
-  "wrapMode": 1,
+  "_duration": 0.027777777777777776,
+  "sample": 36,
+  "speed": 0.1,
+  "wrapMode": "0",
   "curveData": {
     "props": {
-      "position": [
-        {
-          "frame": 0,
-          "value": [
-            0,
-            1039
-          ]
-        },
-        {
-          "frame": 0.09803921568627451,
-          "value": [
-            0,
-            0
-          ]
-        }
-      ],
       "scale": [
         {
           "frame": 0,
@@ -35,11 +19,11 @@
           }
         },
         {
-          "frame": 0.09803921568627451,
+          "frame": 0.027777777777777776,
           "value": {
             "__type__": "cc.Vec2",
-            "x": 1,
-            "y": 1
+            "x": 1.2,
+            "y": 1.2
           }
         }
       ]

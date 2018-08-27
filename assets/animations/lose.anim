@@ -2,27 +2,29 @@
   "__type__": "cc.AnimationClip",
   "_name": "lose",
   "_objFlags": 0,
-  "_rawFiles": null,
-  "_duration": 0.03333333333333333,
-  "sample": 30,
+  "_native": "",
+  "_duration": 0.027777777777777776,
+  "sample": 36,
   "speed": 0.1,
   "wrapMode": 1,
   "curveData": {
     "props": {
-      "position": [
+      "scale": [
         {
           "frame": 0,
-          "value": [
-            -912,
-            0
-          ]
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 0,
+            "y": 0
+          }
         },
         {
-          "frame": 0.03333333333333333,
-          "value": [
-            0,
-            0
-          ]
+          "frame": 0.027777777777777776,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.2,
+            "y": 1.2
+          }
         }
       ]
     }

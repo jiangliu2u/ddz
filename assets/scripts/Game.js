@@ -1,6 +1,3 @@
-const config = require('./common/config');
-const PokerPlay = require('./poker/poker_handler');
-const Util = require('./common/util');
 const common = require("./common/_init");
 cc.Class({
     extends: cc.Component,
@@ -29,17 +26,6 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        status: false,//是否可以出牌
-        dontfollow: true,//是否可以不要
-        team: 0,//队伍
-        win: {
-            default: null,
-            type: cc.Animation
-        },
-        lose: {
-            default: null,
-            type: cc.Animation
-        },
         facePrefab: {
             default: null,
             type: cc.Prefab
@@ -48,25 +34,31 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        endthis:{
-            default:null,
-            type:cc.Node
-        }
+        win: {
+            default: null,
+            type: cc.Animation
+        },
+        lose: {
+            default: null,
+            type: cc.Animation
+        },
+
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
         cc.debug.setDisplayStats(false);
-        
+
         common.Protocol.init();
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.onPlayerEnterTable, this);
         g.handedoutPokers = { seatId: 0, pokers: [] };
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PASS, this.onOtherPass, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DISCARD, this.onOtherDiscard, this);
-        common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.hehe, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
         this.faceNodes.getComponent("face_node").createSelf({ index: 1 });
+        g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
 
     },
@@ -106,35 +98,38 @@ cc.Class({
     },
     //其他玩家不要时
     onOtherPass(data) {
-        console.log("其他玩都家不要");
+        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
+        var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
+        hop.hideRight();
+        hop.hideSelf();
+        console.log("其他玩都家不要");//显示出牌控制按钮
         switch (data["seatId"]) {
             case 0:
                 if (g.player.seatId === 1) {
-                    cc.find("Canvas/controlPanel").active = true;
+                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+                    cp.setVisible(true);
                     //不要的玩家显示“不要prefab”
-
                 } else {
                 }
                 break;
             case 1:
                 if (g.player.seatId === 0) {
-                } else {
-                    cc.find("Canvas/controlPanel").active = true;
-                    //不要的玩家显示“不要prefab”
 
+                } else {
+                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+                    cp.setVisible(true);
+                    //不要的玩家显示“不要prefab”
                 }
                 break;
             case 2:
                 if (g.player.seatId === 0) {
-                    cc.find("Canvas/controlPanel").active = true;
+                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+                    cp.setVisible(true);
                     //不要的玩家显示“不要prefab”
-
-
                 } else {
                 }
                 break;
         }
-
     },
     /**
      * 0表示自己节点坐标(-570,-250)
@@ -162,18 +157,25 @@ cc.Class({
         if (pokers.length === 20) {
             this.status = true;
             this._setControlPanelVisible();
+            g.player.team = 1;
         }
 
     },
     //显示其他玩家出的牌
     _createHandedOutPoker: function (data) {
-        console.log("座位号 "+ data['seatId'] + "得玩家出牌");
+        console.log("座位号 " + data['seatId'] + "得玩家出牌");
         this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop._createHandedOutPoker(data);
     },
-    hehe:function(data){
-        this.win.play("win");
+    endGame: function (data) {
+        console.log(data);
+        console.log(g.player.team);
+        if (data["team"] === g.player.team) {
+            this.win.play();
+        } else {
+            this.lose.play();
+        }
     }
 
 });

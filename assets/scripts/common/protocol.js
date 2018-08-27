@@ -16,7 +16,7 @@ const common = require('_init');
             this._onDiscard();
             this._onPass();
             this._onAllPlayers();
-            this._onGameOver();
+            this._onEndGame();
 
         },
 
@@ -52,7 +52,7 @@ const common = require('_init');
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_PASS, data);
             });
         },
-        _onGameOver:function(){
+        _onEndGame:function(){
             g.player.register(common.EventType.MSG_DDZ_GAME_OVER, function (data) {
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_GAME_OVER, data);
             });
