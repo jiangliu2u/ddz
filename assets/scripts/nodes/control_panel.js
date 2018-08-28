@@ -83,7 +83,7 @@ cc.Class({
     },
     //不要
     pass() {
-        if (g.handedoutPokers["pokers"].length == 0) {
+        if (g.handedoutPokers["pokers"].length === 0) {
             console.log("你是第一个出牌，不能不要");
         } else {
             if (g.handedoutPokers["seatId"] === g.player.seatId) {

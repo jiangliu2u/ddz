@@ -33,7 +33,8 @@ cc.Class({
         } else {
             var io = require('./common/socket.io');
         }
-        var socket = io.connect('http://127.0.0.1:3001');
+        //var socket = io.connect('http://127.0.0.1:3001');
+        var socket = io.connect('http://192.168.11.62:3001');
         var self = this;
         socket.on("yourid", function (data) {
             var id = data['id'];

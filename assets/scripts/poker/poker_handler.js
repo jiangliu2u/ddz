@@ -28,13 +28,6 @@ PokerWrapper.prototype.follow = function (targetPokerList) {
         return true;
     }
     let targetWrapper = new PokerPlay().getPokerWrapper(targetPokerList);
-    console.log(typeof(this.headValue));
-    console.log("this.headValue  "+this.headValue);
-    console.log(typeof (targetWrapper.headValue));
-    console.log("targetWrapper.headValue  " + targetWrapper.headValue);
-    console.log(this.pokerType +' type '+ targetWrapper.pokerType);
-    console.log(this.size +' size '+ targetWrapper.size);
-    console.log(this.headValue > targetWrapper.headValue);
     if ((this.pokerType === targetWrapper.pokerType) && (this.size === targetWrapper.size) && (parseInt(this.headValue) > parseInt(targetWrapper.headValue))) {
         return true;
     } else {
