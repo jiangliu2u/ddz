@@ -21,12 +21,9 @@ cc.Class({
     },
     setVisible(v) {
         if (v) {
-            console.log("set true");
-            this._doShow();
             this.startCountdown(15);
-        }else{
-            this._doHide();
         }
+        this.node.active = v;
     },
     _scheduleClock: function () {
         this._countdown--;

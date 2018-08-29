@@ -19,6 +19,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        clockPrefb: {
+            default: null,
+            type: cc.Prefab
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -36,27 +40,64 @@ cc.Class({
     hidePass: function (loc) {
         switch (loc) {
             case "left":
-                this.rightPanel.children[0].active = false;
+                if (this.leftPanel.children.length !== 0) {
+                    console.log("删除左边不要");
+                    var children = this.leftPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = false };
+                    }
+                }
                 break;
             case "right":
-                this.leftPanel.children[0].active = false;
+                if (this.rightPanel.children.length !== 0) {
+                    console.log("删除右边边不要");
+                    var children = this.rightPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = false };
+                    }
+                }
 
                 break;
             case "self":
-                this.selfPanel.children[0].active = false;
+                if (this.selfPanel.children.length !== 0) {
+                    console.log("删除自己");
+                    var children = this.selfPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = false };
+                    }
+                }
                 break;
         }
     },
     showPass: function (loc) {
         switch (loc) {
             case "left":
-                this.rightPanel.children[0].active = true;
+                if (this.leftPanel.children.length !== 0) {
+                    console.log("删除左边不要");
+                    var children = this.leftPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = true };
+                    }
+                }
                 break;
             case "right":
-                this.leftPanel.children[0].active = true;
+                if (this.rightPanel.children.length !== 0) {
+                    console.log("删除右边边不要");
+                    var children = this.rightPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = true };
+                    }
+                }
+
                 break;
             case "self":
-                this.selfPanel.children[0].active = true;
+                if (this.selfPanel.children.length !== 0) {
+                    console.log("删除自己");
+                    var children = this.selfPanel.children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children._name === "pass") { children[i].active = true };
+                    }
+                }
                 break;
         }
     },
@@ -72,6 +113,9 @@ cc.Class({
                     this.hidePass("left");
                     this.showPokers(msg["pokers"], this.leftPanel);
                 } else {
+                    //左边玩家显示倒计时
+                    this.leftTimer();
+
                     console.log("右边玩家出牌");
                     this.hidePass("right");
                     this.showPokers(msg["pokers"], this.rightPanel);
@@ -81,7 +125,9 @@ cc.Class({
                 if (g.player.seatId === 0) {
                     console.log("右边玩家出牌");
                     this.hidePass("right");
+                    this.leftTimer();
 
+                    //左边玩家显示倒计时
                     this.showPokers(msg["pokers"], this.rightPanel);
                 } else {
                     console.log("左边玩家出牌");
@@ -102,6 +148,8 @@ cc.Class({
                     this.showPokers(msg["pokers"], this.leftPanel);
                 } else {
                     console.log("右边玩家出牌");
+                    //左边玩家显示倒计时
+                    this.leftTimer();
                     this.hidePass("right");
                     this.showPokers(msg["pokers"], this.rightPanel);
                 }
@@ -128,7 +176,7 @@ cc.Class({
         if (panelNode.children.length !== 0) {
             var children = panelNode.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name !== "pass"){children[i].destroy()};
+                if (children._name !== "pass") { children[i].destroy() };
             }
         }
 
@@ -139,7 +187,7 @@ cc.Class({
             console.log("删除右边");
             var children = this.rightPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name !== "pass") { children[i].destroy() };
+                if (children._name === "poker") { children[i].destroy() };
             }
         }
     },
@@ -149,7 +197,7 @@ cc.Class({
             console.log("删除左边");
             var children = this.lefttPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name !== "pass") { children[i].destroy() };
+                if (children._name === "poker") { children[i].destroy() };
             }
         }
     },
@@ -161,12 +209,21 @@ cc.Class({
             console.log("删除自己");
             var children = this.selfPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name !== "pass") { children[i].destroy() };
+                if (children._name === "poker") { children[i].destroy() };
             }
         }
     },
     start() {
 
+    },
+    leftTimer() {
+        console.log("left timer");
+        var hop = cc.find("Canvas/handedOutPokerPanel/leftPanel");
+        var clock = cc.instantiate(this.clockPrefb);
+        this.leftPanel.addChild(clock);
+        clock.setPosition(cc.v2(0, 0));
+        var clockScript = clock.getComponent("clock");
+        clockScript.startCountdown(20);
     },
 
     // update (dt) {},

@@ -11,8 +11,15 @@ cc.Class({
         handedOutPokerPanel: {
             default: null,
             type: cc.Node
-        }
-
+        },
+        clockPrefb: {
+            default: null,
+            type: cc.Prefab
+        },
+        clock: {
+            default: null,
+            type: cc.Node
+        },
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -22,10 +29,18 @@ cc.Class({
     },
     setVisible(v) {
         if (v) {
+            var clock = cc.instantiate(this.clockPrefb);
+            this.clock.addChild(clock);
+            clock.setPosition(cc.v2(0,0));
+            var clockScript = clock.getComponent("clock");
+            clockScript.startCountdown(20);
             var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
             hop.hideSelf();
+        } else {
+            if (this.clock.children.length !== 0) { this.clock.children[0].destroy() };
         }
         this.node.active = v;
+
     },
     //出牌
     discard() {
@@ -105,7 +120,7 @@ cc.Class({
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop.hideHandedoutPokers(hop.leftPanel);
     },
-    
+
 
     start() {
 
