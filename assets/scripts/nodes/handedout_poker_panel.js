@@ -148,7 +148,8 @@ cc.Class({
                     this.showPokers(msg["pokers"], this.leftPanel);
                 } else {
                     console.log("右边玩家出牌");
-                    //左边玩家显示倒计时
+                    //左边玩家显示倒计时,删除之前
+                    this.hideLeft();
                     this.leftTimer();
                     this.hidePass("right");
                     this.showPokers(msg["pokers"], this.rightPanel);
@@ -158,7 +159,7 @@ cc.Class({
         //g.handedoutPokers = { id: msg["playerId"], pokers: msg["pokers"] };
     },
     showPokers(pokers, panelNode) {
-        this.hideHandedoutPokers(panelNode);
+        this.hide(panelNode);
         var len = pokers.length;
         var totalWidth = (len - 1) * this._M + this._W;
         var startPos = -totalWidth / 2;
@@ -171,67 +172,65 @@ cc.Class({
             pokerPrefab.setPosition(cc.v2(startPos + i * this._M, 0));
         }
     },
-    hideHandedoutPokers(panelNode) {
 
-        if (panelNode.children.length !== 0) {
-            var children = panelNode.children;
+    hide(panelNode) {
+        if (this.selfPanel.children.length !== 0) {
+            var children = this.selfPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children[i]._name !== "pass") { children[i].destroy() };
+                if (children[i]._name === "poker") {
+                    children[i].destroy();
+                }
+                ;
             }
         }
-
     },
     hideRight() {
 
-        if (this.rightPanel.children.length !== 0) {
-            console.log("删除右边");
-            var children = this.rightPanel.children;
-            for (var i = 0, len = children.length; i < len; i++) {
-                if (children[i]._name === "poker") { children[i].destroy() };
-            }
-        }
+        this.hide(this.rightPanel);
     },
     hideLeft() {
+        this.hide(this.lefttPanel);
 
-        if (this.lefttPanel.children.length !== 0) {
-            console.log("删除左边");
-            var children = this.lefttPanel.children;
-            for (var i = 0, len = children.length; i < len; i++) {
-                if (children[i]._name === "poker") { children[i].destroy() };
-            }
-        }
     },
     hideSelf() {
-        console.log("self");
-        console.log(this.selfPanel.children);
-        console.log(this.selfPanel.children.length);
-        if (this.selfPanel.children.length !== 0) {
-            console.log("删除自己");
-            var children = this.selfPanel.children;
-            for (var i = 0, len = children.length; i < len; i++) {
-                if (children[i]._name === "poker") { children[i].destroy() };
-            }
-        }
+        this.hide(this.selfPanel);
     },
     start() {
 
     },
     leftTimer() {
         console.log("left timer");
+        this.showTimer(this.leftPanel);
+    },
+    rightTimer() {
+        console.log("right timer");
+        this.showTimer(this.rightPanel);
+    },
+    showTimer(panelNode) {
         var clock = cc.instantiate(this.clockPrefb);
-        this.leftPanel.addChild(clock);
+        panelNode.addChild(clock);
         clock.setPosition(cc.v2(0, 0));
         var clockScript = clock.getComponent("clock");
         clockScript.startCountdown(20);
     },
-    rightTimer() {
-        console.log("right timer");
-        var clock = cc.instantiate(this.clockPrefb);
-        this.rightPanel.addChild(clock);
-        clock.setPosition(cc.v2(0, 0));
-        var clockScript = clock.getComponent("clock");
-        clockScript.startCountdown(20);
+    hideTimer(panelNode) {
+        if (panelNode.children.length !== 0) {
+            var children = this.selfPanel.children;
+            for (var i = 0, len = children.length; i < len; i++) {
+                if (children[i]._name === "clock") {
+                    children[i].destroy();
+                }
+            }
+        }
+    },
+    hideRightTimer() {
+        this.hideTimer(this.rightTimer);
+    },
+    hideLeftTimer() {
+        this.hideTimer(this.leftPanel);
     },
 
     // update (dt) {},
 });
+
+

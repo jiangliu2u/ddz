@@ -146,8 +146,9 @@ cc.Class({
         };
         g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
         this._neatenPokers(this.pokers);
-        //右边玩家显示倒计时
+        //删除右边玩家之前出的牌并显示倒计时
         hop.rightTimer();
+        hop.hideRight();
         g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if (this.pokers.length === 0) {
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
