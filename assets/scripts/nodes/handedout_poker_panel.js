@@ -176,7 +176,7 @@ cc.Class({
         if (panelNode.children.length !== 0) {
             var children = panelNode.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name !== "pass") { children[i].destroy() };
+                if (children[i]._name !== "pass") { children[i].destroy() };
             }
         }
 
@@ -187,7 +187,7 @@ cc.Class({
             console.log("删除右边");
             var children = this.rightPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name === "poker") { children[i].destroy() };
+                if (children[i]._name === "poker") { children[i].destroy() };
             }
         }
     },
@@ -197,7 +197,7 @@ cc.Class({
             console.log("删除左边");
             var children = this.lefttPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name === "poker") { children[i].destroy() };
+                if (children[i]._name === "poker") { children[i].destroy() };
             }
         }
     },
@@ -209,7 +209,7 @@ cc.Class({
             console.log("删除自己");
             var children = this.selfPanel.children;
             for (var i = 0, len = children.length; i < len; i++) {
-                if (children._name === "poker") { children[i].destroy() };
+                if (children[i]._name === "poker") { children[i].destroy() };
             }
         }
     },
@@ -218,9 +218,16 @@ cc.Class({
     },
     leftTimer() {
         console.log("left timer");
-        var hop = cc.find("Canvas/handedOutPokerPanel/leftPanel");
         var clock = cc.instantiate(this.clockPrefb);
         this.leftPanel.addChild(clock);
+        clock.setPosition(cc.v2(0, 0));
+        var clockScript = clock.getComponent("clock");
+        clockScript.startCountdown(20);
+    },
+    rightTimer() {
+        console.log("right timer");
+        var clock = cc.instantiate(this.clockPrefb);
+        this.rightPanel.addChild(clock);
         clock.setPosition(cc.v2(0, 0));
         var clockScript = clock.getComponent("clock");
         clockScript.startCountdown(20);

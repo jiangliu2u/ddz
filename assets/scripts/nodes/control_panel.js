@@ -36,10 +36,11 @@ cc.Class({
             clockScript.startCountdown(20);
             var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
             hop.hideSelf();
+            this.node.active = true;
         } else {
             if (this.clock.children.length !== 0) { this.clock.children[0].destroy() };
+            this.node.active = false;
         }
-        this.node.active = v;
 
     },
     //出牌
@@ -58,7 +59,6 @@ cc.Class({
                 pp._onDiscard(pokers);
                 this.setVisible(false);
                 this.showSelfHandeOutPoker(ps);
-                this.hideLeftHandeOutPoker();
 
             } else {
                 console.log("此前无人出牌，不符合规则，不可以出牌");
@@ -72,7 +72,6 @@ cc.Class({
                     pp._onDiscard(pokers);
                     this.setVisible(false);
                     this.showSelfHandeOutPoker(ps);
-                    this.hideLeftHandeOutPoker();
 
                 } else {
                     console.log("别人要不起你的牌，但你出的不符合规则");
@@ -84,7 +83,6 @@ cc.Class({
                     pp._onDiscard(pokers);
                     this.setVisible(false);
                     this.showSelfHandeOutPoker(ps);
-                    this.hideLeftHandeOutPoker();
                 }
                 else {
                     console.log("类型不对或者大小不对，不可以跟牌");
@@ -115,10 +113,6 @@ cc.Class({
     showSelfHandeOutPoker(pokers) {
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop.showPokers(pokers, hop.selfPanel);
-    },
-    hideLeftHandeOutPoker() {
-        var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
-        hop.hideHandedoutPokers(hop.leftPanel);
     },
 
 

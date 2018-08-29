@@ -125,7 +125,7 @@ cc.Class({
     _onDiscard: function (pokers) {
         console.log(pokers);
         var pokersToDel = [];
-        var hop = cc.find("Canvas/handedOutPokerPanel/rightPanel");
+        var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
         for (var i = 0, len = pokers.length; i < len; i++) {
             for (var j = 0; j < this.pokers.length; j++) {
                 if (pokers[i]._id === this.pokers[j]._id) {
@@ -146,18 +146,8 @@ cc.Class({
         };
         g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
         this._neatenPokers(this.pokers);
-        var h = cc.find("Canvas/handedOutPokerPanel");
-        h.getComponent("handedout_poker_panel").hideRight();
         //右边玩家显示倒计时
-        for (var i = 0; i < hop.children.length; i++) {
-
-            if (hop.children[i].name === "clock") {
-                console.log("set clock ");
-                console.log(hop.children[i].active);
-                hop.children[i].getComponent("clock").setVisible(true);
-                console.log(hop.children[i].active);
-            }
-        }
+        hop.rightTimer();
         g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if (this.pokers.length === 0) {
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
