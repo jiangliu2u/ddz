@@ -47,6 +47,7 @@ cc.Class({
     discard() {
         var pp = this.pokerPanel.getComponent("poker_panel");
         var pokers = pp.getSelectedPokers();
+        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         var ps = [];
         for (var i = 0; i < pokers.length; i++) {
             ps.push(pokers[i].getComponent("poker").value);
@@ -96,6 +97,7 @@ cc.Class({
     },
     //不要
     pass() {
+
         if (g.handedoutPokers["pokers"].length === 0) {
             console.log("你是第一个出牌，不能不要");
         } else {
@@ -104,8 +106,10 @@ cc.Class({
             } else {
                 var pp = this.pokerPanel.getComponent("poker_panel");
                 pp._onPass();
-                this.handedOutPokerPanel.getComponent("handedout_poker_panel").selfPass();
                 console.log("不要");
+                var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+                pat.rightTimer();
+                pat.selfPass();
                 this.setVisible(false);
             }
         }

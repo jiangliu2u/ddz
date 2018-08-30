@@ -102,44 +102,55 @@ cc.Class({
     //其他玩家不要时
     onOtherPass(data) {
         //显示出牌控制按钮
+        let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         switch (data["seatId"]) {
             case 0:
                 if (g.player.seatId === 1) {
                     console.log("左边玩家不要");
-                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+                    pat.hideSelfPass();
+                    pat.hideLeftTimer();
+                    pat.leftPass();
                     cp.setVisible(true);
-                    this.showPass("left");
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
                 } else {
-                    this.showPass("right");
                     console.log("右边玩家不要");
+                    pat.hideRightTimer();
+                    pat.leftTimer();
+                    pat.rightPass();
                     console.log("删除该不要的玩家出的牌，并右边显示不要");
                 }
                 break;
             case 1:
                 if (g.player.seatId === 0) {
+                    pat.hideRightTimer();
+                    pat.rightPass();
                     console.log("右边玩家不要");
-                    this.showPass("right");
-                    console.log("删除该不要的玩家出的牌，并左边显示不要");
-                } else {
-                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
-                    cp.setVisible(true);
-                    console.log("左边玩家不要");
-                    this.showPass("left");
+                    pat.leftTimer();
                     console.log("删除该不要的玩家出的牌，并右边显示不要");
+                } else {
+                    cp.setVisible(true);
+                    pat.hideLeftTimer();
+                    pat.leftPass();
+                    console.log("左边玩家不要");
+                    pat.hideSelfPass();
+                    console.log("删除该不要的玩家出的牌，并左边显示不要");
                 }
                 break;
             case 2:
                 if (g.player.seatId === 0) {
+                    pat.hideLeftTimer();
+                    pat.leftPass();
                     console.log("左边玩家不要");
-                    this.showPass("left");
-                    let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
+                    pat.hideSelfPass();
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
 
                 } else {
-                    this.showPass("right");
+                    pat.hideRightTimer();
+                    pat.rightPass();
                     console.log("右边玩家不要");
+                    pat.leftTimer();
                     console.log("删除该不要的玩家出的牌，并右边显示不要")
 
                 }
@@ -188,10 +199,8 @@ cc.Class({
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         switch (loc) {
             case "left":
-                hop.leftPass();
                 break;
             case "right":
-                hop.rightPass();
         }
     },
     endGame: function (data) {

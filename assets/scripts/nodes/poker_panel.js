@@ -124,6 +124,7 @@ cc.Class({
      */
     _onDiscard: function (pokers) {
         console.log(pokers);
+        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         var pokersToDel = [];
         var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
         for (var i = 0, len = pokers.length; i < len; i++) {
@@ -147,8 +148,8 @@ cc.Class({
         g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
         this._neatenPokers(this.pokers);
         //删除右边玩家之前出的牌并显示倒计时
-        hop.rightTimer();
         hop.hideRight();
+        pat.rightTimer();
         g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if (this.pokers.length === 0) {
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
