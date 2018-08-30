@@ -34,7 +34,7 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        passPrefb:{
+        passPrefb: {
             default: null,
             type: cc.Prefab
         },
@@ -108,8 +108,10 @@ cc.Class({
                     console.log("左边玩家不要");
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
+                    this.showPass("left");
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
                 } else {
+                    this.showPass("right");
                     console.log("右边玩家不要");
                     console.log("删除该不要的玩家出的牌，并右边显示不要");
                 }
@@ -117,22 +119,26 @@ cc.Class({
             case 1:
                 if (g.player.seatId === 0) {
                     console.log("右边玩家不要");
+                    this.showPass("right");
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
                 } else {
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
                     console.log("左边玩家不要");
+                    this.showPass("left");
                     console.log("删除该不要的玩家出的牌，并右边显示不要");
                 }
                 break;
             case 2:
                 if (g.player.seatId === 0) {
                     console.log("左边玩家不要");
+                    this.showPass("left");
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
 
                 } else {
+                    this.showPass("right");
                     console.log("右边玩家不要");
                     console.log("删除该不要的玩家出的牌，并右边显示不要")
 
@@ -177,7 +183,17 @@ cc.Class({
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop._createHandedOutPoker(data);
     },
-    
+    showPass(loc) {
+        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
+        var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
+        switch (loc) {
+            case "left":
+                hop.leftPass();
+                break;
+            case "right":
+                hop.rightPass();
+        }
+    },
     endGame: function (data) {
         console.log(data);
         console.log(g.player.team);

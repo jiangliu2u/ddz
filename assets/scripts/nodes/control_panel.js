@@ -104,6 +104,7 @@ cc.Class({
             } else {
                 var pp = this.pokerPanel.getComponent("poker_panel");
                 pp._onPass();
+                this.handedOutPokerPanel.getComponent("handedout_poker_panel").selfPass();
                 console.log("不要");
                 this.setVisible(false);
             }

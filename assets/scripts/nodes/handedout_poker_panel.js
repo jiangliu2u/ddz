@@ -22,6 +22,10 @@ cc.Class({
         clockPrefb: {
             default: null,
             type: cc.Prefab
+        },
+        passPrefb: {
+            default: null,
+            type: cc.Prefab
         }
     },
 
@@ -33,73 +37,6 @@ cc.Class({
 
     },
     onLoad() {
-        g.right = this.rightPanel;
-        g.left = this.leftPanel;
-        g.self = this.selfPanel;
-    },
-    hidePass: function (loc) {
-        switch (loc) {
-            case "left":
-                if (this.leftPanel.children.length !== 0) {
-                    console.log("删除左边不要");
-                    var children = this.leftPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = false };
-                    }
-                }
-                break;
-            case "right":
-                if (this.rightPanel.children.length !== 0) {
-                    console.log("删除右边边不要");
-                    var children = this.rightPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = false };
-                    }
-                }
-
-                break;
-            case "self":
-                if (this.selfPanel.children.length !== 0) {
-                    console.log("删除自己");
-                    var children = this.selfPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = false };
-                    }
-                }
-                break;
-        }
-    },
-    showPass: function (loc) {
-        switch (loc) {
-            case "left":
-                if (this.leftPanel.children.length !== 0) {
-                    console.log("删除左边不要");
-                    var children = this.leftPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = true };
-                    }
-                }
-                break;
-            case "right":
-                if (this.rightPanel.children.length !== 0) {
-                    console.log("删除右边边不要");
-                    var children = this.rightPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = true };
-                    }
-                }
-
-                break;
-            case "self":
-                if (this.selfPanel.children.length !== 0) {
-                    console.log("删除自己");
-                    var children = this.selfPanel.children;
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        if (children._name === "pass") { children[i].active = true };
-                    }
-                }
-                break;
-        }
     },
     _createHandedOutPoker: function (msg) {
         console.log(msg);
@@ -109,30 +46,25 @@ cc.Class({
                     console.log("左边玩家出牌");
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
-                    this.hidePass("self");
-                    this.hidePass("left");
+                    this.hideLeftTimer();
                     this.showPokers(msg["pokers"], this.leftPanel);
                 } else {
                     //左边玩家显示倒计时
                     this.leftTimer();
 
                     console.log("右边玩家出牌");
-                    this.hidePass("right");
                     this.showPokers(msg["pokers"], this.rightPanel);
                 }
                 break;
             case 1:
                 if (g.player.seatId === 0) {
                     console.log("右边玩家出牌");
-                    this.hidePass("right");
                     this.leftTimer();
-
                     //左边玩家显示倒计时
                     this.showPokers(msg["pokers"], this.rightPanel);
                 } else {
                     console.log("左边玩家出牌");
-                    this.hidePass("self");
-                    this.hidePass("left");
+                    this.hideLeftTimer();
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
@@ -143,20 +75,17 @@ cc.Class({
                     console.log("左边玩家出牌");
                     let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
                     cp.setVisible(true);
-                    this.hidePass("self");
-                    this.hidePass("left");
+                    this.hideLeftTimer();
                     this.showPokers(msg["pokers"], this.leftPanel);
                 } else {
                     console.log("右边玩家出牌");
                     //左边玩家显示倒计时,删除之前
                     this.hideLeft();
                     this.leftTimer();
-                    this.hidePass("right");
                     this.showPokers(msg["pokers"], this.rightPanel);
                 }
                 break;
         }
-        //g.handedoutPokers = { id: msg["playerId"], pokers: msg["pokers"] };
     },
     showPokers(pokers, panelNode) {
         this.hide(panelNode);
@@ -172,15 +101,17 @@ cc.Class({
             pokerPrefab.setPosition(cc.v2(startPos + i * this._M, 0));
         }
     },
-
+    //删除扑克
     hide(panelNode) {
-        if (this.selfPanel.children.length !== 0) {
-            var children = this.selfPanel.children;
-            for (var i = 0, len = children.length; i < len; i++) {
-                if (children[i]._name === "poker") {
-                    children[i].destroy();
+        if (panelNode.children) {
+            if (panelNode.children.length !== 0) {
+                var children = panelNode.children;
+                for (var i = 0, len = children.length; i < len; i++) {
+                    if (children[i]._name === "poker") {
+                        children[i].destroy();
+                    }
+                    ;
                 }
-                ;
             }
         }
     },
@@ -199,14 +130,16 @@ cc.Class({
 
     },
     leftTimer() {
-        console.log("left timer");
-        this.showTimer(this.leftPanel);
+        this.hideLeft();
+        this.hideLeftPass();
+        this._showTimer(this.leftPanel);
     },
     rightTimer() {
-        console.log("right timer");
-        this.showTimer(this.rightPanel);
+        this.hideRight();
+        this.hideRightPass();
+        this._showTimer(this.rightPanel);
     },
-    showTimer(panelNode) {
+    _showTimer(panelNode) {
         var clock = cc.instantiate(this.clockPrefb);
         panelNode.addChild(clock);
         clock.setPosition(cc.v2(0, 0));
@@ -215,7 +148,7 @@ cc.Class({
     },
     hideTimer(panelNode) {
         if (panelNode.children.length !== 0) {
-            var children = this.selfPanel.children;
+            var children = panelNode.children;
             for (var i = 0, len = children.length; i < len; i++) {
                 if (children[i]._name === "clock") {
                     children[i].destroy();
@@ -229,6 +162,45 @@ cc.Class({
     hideLeftTimer() {
         this.hideTimer(this.leftPanel);
     },
+    _showPass(panelNode) {
+        var pass = cc.instantiate(this.passPrefb);
+        panelNode.addChild(pass);
+        pass.setPosition(cc.v2(0, 0));
+    },
+    rightPass() {
+        this.hideRightTimer();
+        this.hideRight();
+        this._showPass(this.rightPanel)
+    },
+    leftPass() {
+        this.hideLeft();
+        this.hideLeftTimer();
+        this._showPass(this.leftPanel);
+    },
+    selfPass() {
+        this.hideSelf();
+        this._showPass(this.selfPanel);
+    },
+    _hidePass: function (panelNode) {
+        if (panelNode.children.length !== 0) {
+            var children = panelNode.children;
+            for (var i = 0, len = children.length; i < len; i++) {
+                if (children[i]._name === "pass") { children[i].active = true };
+            }
+        }
+    },
+    hideRightPass() {
+
+        this._hidePass(this.rightPanel);
+    },
+    hideLeftPass() {
+
+        this._hidePass(this.leftPanel);
+    },
+    hideSelfPass() {
+        this._hidePass(this.selfPanel);
+    },
+
 
     // update (dt) {},
 });
