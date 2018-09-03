@@ -32,7 +32,13 @@ cc.Class({
         // var spriteFrame =
         this.faceSpr.spriteFrame = this.FACE_MAP[num];
     },
-
+    changeFace(isLandlord){
+        if (isLandlord){
+            this.faceSpr.spriteFrame = this.FACE_MAP[1];
+        }else{
+            this.faceSpr.spriteFrame = this.FACE_MAP[0];
+        }
+    },
     start () {
 
     },

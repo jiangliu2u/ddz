@@ -101,22 +101,22 @@ cc.Class({
 
     _flip(front) {
 
-        this.frontNode.enabled = front;
-        this.backSpr.enabled = !front;
+        this.frontNode.active = front;
+        this.backSpr.active = !front;
 
         // todo animation
     },
 
     initPoker(value, sizeType) {
-        // if (value == 0) {
-        //     this.flip(false);
-        //     return;
-        // }
-        // this.flip(false);
-        // // return;
-        // this.flip(true);
+        if (sizeType === 1) {
+            this.node.scale = 0.6;
+        }
+        if (value === -1) {
+            this.flip(false);
+            return;
+        }
+        this.flip(true);
         this.value = value + '';
-        // console.log(value+'');
         var type = this.getType(this.value);
         if (this._isJoker(type)) {
             //大小王的情况
@@ -155,9 +155,7 @@ cc.Class({
             this.bigFlowerSpr.spriteFrame = flower;
         }
 
-        if (sizeType === 1) {
-            this.node.scale = 0.6;
-        }
+
     },
 
     doDisable() {

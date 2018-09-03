@@ -16,6 +16,10 @@ const common = require('_init');
         MSG_DDZ_PASS: "MSG_DDZ_PASS",
         MSG_DDZ_GAME_OVER: "MSG_DDZ_GAME_OVER",
         MSG_DDZ_START_GAME: "MSG_DDZ_START_GAME",
+        MSG_DDZ_REGISTER:"MSG_DDZ_REGISTER",
+        MSG_DDZ_LOGIN:"MSG_DDZ_LOGIN",
+        RESP_DDZ_LOGIN:"RESP_DDZ_LOGIN",
+        RESP_DDZ_REGISTER:"RESP_DDZ_REGISTER"
 
     };
 

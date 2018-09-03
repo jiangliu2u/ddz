@@ -1,4 +1,4 @@
-const common = require("./common/_init");
+const common = require("../common/_init");
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -46,6 +46,10 @@ cc.Class({
             default: null,
             type: cc.Animation
         },
+        faces:{
+            default:[],
+            type:cc.Node
+        }
 
     },
 
@@ -61,9 +65,11 @@ cc.Class({
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PASS, this.onOtherPass, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DISCARD, this.onOtherDiscard, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
-        this.faceNodes.getComponent("face_node").createSelf({ index: 1 });
+        this.faceNodes.getComponent("face_node").createSelf({d:1});
         g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
+        this._createDipai([-1,-1,-1]);
+        g.test = this;
 
     },
 
@@ -73,21 +79,29 @@ cc.Class({
     _updateDipai(pokers) {
 
     },
-    _setControlPanelVisible() {
+    _setControlPanelVisible(visable) {
         var cp = this.controlPanel.getComponent("control_panel");
-        cp.setVisible(this.status);
+        cp.setVisible(visable);
     },
     _createDipai: function (pokers) {
-
+        if (this.dipaiPanel.children !== undefined) {
+            for (var i = 0; i < this.dipaiPanel.children.length; i++) {
+                if (this.dipaiPanel.children.name === "poker") {
+                    this.dipaiPanel.children[i].destroy();
+                    //todo 重置底牌不销毁对象，重复利用
+                }
+            }
+        }
         for (var i = 0; i < pokers.length; i++) {
             var pokerPrefab = cc.instantiate(this.poker);
             var script = pokerPrefab.getComponent("poker");
             script.initPoker(pokers[i], 1);
             script.doDisable();
             pokerPrefab.setPosition(cc.v2(-30 + i * 30, 0));
-            this.dipaiPanel.node.addChild(pokerPrefab);
+            this.dipaiPanel.addChild(pokerPrefab);
         }
     },
+
     //新玩家加入桌子
     onPlayerEnterTable: function (data) {
         // 转换seatId
@@ -162,9 +176,9 @@ cc.Class({
      * 1表示左边的玩家,节点坐标(-570,90)
      * 2表示右边的玩家,节点坐标(604,90)
      */
-    _createSelfFace: function (seatId, name, coin) {
+    _createSelfFace: function (name, coin, num) {
         var faceItem0 = cc.instantiate(this.facePrefab);
-        faceItem0.getComponent('facecontroller').initFace(seatId, name, coin);
+        faceItem0.getComponent('facecontroller').initFace(name, coin, num);
         this.faceNodes.selfFaceNode.addChild(faceItem0);
         faceItem0.setPosition(cc.v2(0, 0));
     },
@@ -176,15 +190,30 @@ cc.Class({
     _testHandoutPoker: function () { },
 
     //发牌时创建手牌
-    _createHandPoker: function (pokers) {
+    _createHandPoker: function (data) {
+
         console.log("开始发牌");
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
-        pokerPanel._createPokers(pokers);
-        if (pokers.length === 20) {
-            this.status = true;
-            this._setControlPanelVisible();
-            g.player.team = 1;
+        var fn = this.faceNodes.getComponent("face_node");
+        g.player.team = data["team"];
+
+        var seatId = g.player.seatId;
+        var landlord = data["landlord"];
+        if(g.player.seatId===data["landlord"]){
+            pokerPanel._createPokers(data["pokers"].concat(data["dipai"]));
+            this._setControlPanelVisible(true);
+        } else {
+            pokerPanel._createPokers(data["pokers"]);
         }
+        for(var i = 0;i<this.faces.length;i++){
+            
+            
+        }
+        this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
+        this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
+        this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
+        this._createDipai(data["dipai"]);
+
 
     },
     //显示其他玩家出的牌

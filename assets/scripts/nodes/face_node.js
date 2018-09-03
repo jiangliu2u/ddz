@@ -106,10 +106,24 @@ cc.Class({
     createSelf(data) {
         console.log("自己");
         var faceItem3 = cc.instantiate(this.faceControllerPref);
-        faceItem3.getComponent('facecontroller').initFace("selfName", 99999, 1);
+        faceItem3.getComponent('facecontroller').initFace("selfName", 99999, 3);
         this.selfFaceNode.addChild(faceItem3);
         faceItem3.setPosition(cc.v2(0, 0))
     },
+    _changeFace(facePanel,isFarmer){
+        facePanel.children[0].getComponent("facecontroller").changeFace(isFarmer);
+    },
+    
+    changeLeft(isFarmer){
+        this._changeFace(this.leftFaceNode,isFarmer);
+    },
+    changeRight(isFarmer){
+        this._changeFace(this.rightFaceNode,isFarmer);
+    },
+    changeSelf(isFarmer){
+        this._changeFace(this.selfFaceNode,isFarmer);
+    },
+    
     onLoad() {
         // ar faceItem0 = cc.instantiate(this.faceControllerPref);
         // faceItem0.getComponent('facecontroller').initFace("hehe", 67890, null);

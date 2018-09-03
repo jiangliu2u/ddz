@@ -25,8 +25,10 @@ cc.Class({
 
     //onLoad () {},
     init: function (data) {
-        var tables = data["tables"];
+        var tables = data;
         var self = this;
+        console.log("init table");
+        console.log(data);
         for (let i = 0, len = tables.length; i < len; i++) {
             let item = cc.instantiate(this.table);
             item.getComponent('table').setTableId(tables[i]);

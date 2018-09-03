@@ -33,8 +33,7 @@ const common = require('_init');
             }
             var events = this._eventMap[eventName];
             if (!events) {
-                console.log(eventName);
-                console.error("events is undefined!");
+                console.error("events is undefined! "+eventName);
                 return;
             }
             for (var i = 0, len = events.length; i < len; i++) {
