@@ -49,6 +49,10 @@ cc.Class({
         faces:{
             default:[],
             type:cc.Node
+        },
+        prepareBtn: {
+            default: null,
+            type: cc.Node
         }
 
     },
@@ -64,6 +68,8 @@ cc.Class({
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PASS, this.onOtherPass, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DISCARD, this.onOtherDiscard, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_PREPARED, this.onOtherPrepared, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_LEAVE, this.onOtherLeave, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
         this.faceNodes.getComponent("face_node").createSelf({d:1});
         g.player.team = 0;//加入桌子默认队伍为0
@@ -79,6 +85,7 @@ cc.Class({
     _updateDipai(pokers) {
 
     },
+
     _setControlPanelVisible(visable) {
         var cp = this.controlPanel.getComponent("control_panel");
         cp.setVisible(visable);
@@ -107,7 +114,19 @@ cc.Class({
         // 转换seatId
         this.createFace(data);
     },
-
+    //有玩家离开
+    onOtherLeave(data){
+        if(data['seatId']===g.getLeftPlayerSeatId){
+            this.faceNodes.getComponent("face_node").deleteLeftFace();
+        }
+        if (data['seatId'] === g.getRightPlayerSeatId) {
+            this.faceNodes.getComponent("face_node").deleteRightFace();
+        }
+    },
+    //其他玩家准备
+    onOtherPrepared(data){
+        //todo
+    },
     //其他玩家出牌时，显示其他玩家出的牌
     onOtherDiscard(data) {
         this._createHandedOutPoker(data);
@@ -187,6 +206,7 @@ cc.Class({
         this.faceNodes.getComponent("face_node")._initFace(data);
     },
 
+
     _testHandoutPoker: function () { },
 
     //发牌时创建手牌
@@ -195,20 +215,17 @@ cc.Class({
         console.log("开始发牌");
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         var fn = this.faceNodes.getComponent("face_node");
-        g.player.team = data["team"];
 
         var seatId = g.player.seatId;
         var landlord = data["landlord"];
         if(g.player.seatId===data["landlord"]){
             pokerPanel._createPokers(data["pokers"].concat(data["dipai"]));
             this._setControlPanelVisible(true);
+            g.player.team = 1;
         } else {
             pokerPanel._createPokers(data["pokers"]);
         }
-        for(var i = 0;i<this.faces.length;i++){
-            
-            
-        }
+        
         this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
         this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
         this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
@@ -232,8 +249,22 @@ cc.Class({
             case "right":
         }
     },
+    zhunbei: function () {
+        console.log("prepare clicked");
+        g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_PREPARED, { cmd: "prepare", playerId: g.player.id });
+        this.prepareBtn.active=false;
+    },
     endGame: function (data) {
+
+        var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+        hop.deleteAll();//删除所有出的牌
+        var a = this.controlPanel.getComponent("control_panel");
+        a.setVisible(false);//隐藏出牌按钮
+        var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+        pt.hideAll();//隐藏计时器和不要
         console.log(data);
+        var pokerPanel = this.pokerPanel.getComponent('poker_panel');
+        pokerPanel._deletePokers();
         console.log(g.player.team);
         if (data["team"] === g.player.team) {
             this.win.play();

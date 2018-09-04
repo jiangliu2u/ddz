@@ -153,7 +153,16 @@ cc.Class({
         g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if (this.pokers.length === 0) {
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
-            cc.find("Canvas").getComponent("Game").endGame({ team: g.player.team });
+            var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+            hop.deleteAll();//删除所有出的牌
+            var a = cc.find("Canvas/controlPanel").getComponent("control_panel");
+            a.setVisible(false);//隐藏出牌按钮
+            var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+            pt.hideAll();//隐藏计时器和不要
+            var ga = cc.find("Canvas").getComponent("Game");
+            ga.win.play();
+            // var pokerPanel = cc.find("Canvas/pokerPanel").getComponent('poker_panel');
+            // pokerPanel._deletePokers();
         }
 
 
@@ -187,7 +196,20 @@ cc.Class({
         }
     },
     _deletePokers: function () {
-        //todo
+        //删除所有扑克
+        console.log('结束删除所有扑克');
+        console.log(this.children);
+        if (this.children !== undefined) {
+            if (this.children.length !== 0) {
+                var all = this.children;
+                for (var i = 0, len = all.length; i < len; i++) {
+                    if (all[i]._name === "poker") {
+                        all[i].destroy();
+                       console.log('delete');
+                    }
+                }
+            }
+        }
     },
     _testInitPoker: function () {
 

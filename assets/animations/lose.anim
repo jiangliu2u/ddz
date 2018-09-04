@@ -5,26 +5,18 @@
   "_native": "",
   "_duration": 0.027777777777777776,
   "sample": 36,
-  "speed": 0.1,
+  "speed": 0.2,
   "wrapMode": 1,
   "curveData": {
     "props": {
-      "scale": [
+      "y": [
         {
           "frame": 0,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 0,
-            "y": 0
-          }
+          "value": 800.0000000000001
         },
         {
           "frame": 0.027777777777777776,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 1.2,
-            "y": 1.2
-          }
+          "value": 0
         }
       ]
     }

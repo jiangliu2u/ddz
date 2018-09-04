@@ -123,7 +123,13 @@ cc.Class({
     changeSelf(isFarmer){
         this._changeFace(this.selfFaceNode,isFarmer);
     },
-    
+    deleteLeftFace(){
+        this.leftFaceNode.children[0].destroy();
+    },
+    deleteRightFace() {
+        this.rightFaceNode.children[0].destroy();
+    },
+
     onLoad() {
         // ar faceItem0 = cc.instantiate(this.faceControllerPref);
         // faceItem0.getComponent('facecontroller').initFace("hehe", 67890, null);

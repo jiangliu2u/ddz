@@ -84,6 +84,12 @@ cc.Class({
     hideSelfPass() {
         this._hidePass(this.selfPanel);
     },
-
+    hideAll(){
+        this.hideLeftPass();
+        this.hideLeftTimer();
+        this.hideRightPass();
+        this.hideRightTimer();
+        this.hideSelfPass();
+    }
     // update (dt) {},
 });

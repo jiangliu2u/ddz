@@ -134,6 +134,22 @@ cc.Class({
     hideSelf() {
         this.hide(this.selfPanel);
     },
+    deleteAll() { 
+        let a = [this.rightPanel,this.selfPanel,this.leftPanel];
+        for(var i = 0;i<3;i++){
+            if (a[i].children !== undefined) {
+                if (a[i].children.length !== 0) {
+                    var children = a[i].children;
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        if (children[i]._name === "poker") {
+                            children[i].destroy();
+                        }
+                        ;
+                    }
+                }
+            }
+        }
+    },
     start() {
 
     },

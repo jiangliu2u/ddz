@@ -1,3 +1,4 @@
+const common = require("../common/_init");
 
 cc.Class({
     extends: cc.Component,
@@ -11,11 +12,11 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        leave: {
+        leaveBtn: {
             default: null,
             type: cc.Node
         },
-        continue: {
+        continueBtn: {
             default: null,
             type: cc.Node
         },
@@ -24,7 +25,15 @@ cc.Class({
     onLoad() {
 
     },
+    continue() {
+        g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_PREPARED, { cmd: "prepare", playerId: g.player.id });
+        this.node.setScale(0);
+    },
+    leave(){
+        g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_LEAVE, { cmd: "leave", playerID: g.player.id });
+        cc.director.loadScene("Home");
 
+    },
     start() {
     },
     setWinOrLose(winOrLose) {
