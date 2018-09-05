@@ -35,14 +35,14 @@ cc.Class({
         var self = this;
         var node = this.node;
         this._startPos = 0;
+        g.pN = this;
         // globa.eventmanager.addlisnter(global.EventType.EVENT_DISCARD, this._onDiscard, this);
 
         // 手牌点击事件监听
-        // node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart);
-        // node.on(cc.Node.EventType.TOUCH_END, function(event) {
-        //     self.onTouchEnd(event);
-        // });
-        //this._testInitPoker();
+        node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart);
+        node.on(cc.Node.EventType.TOUCH_END, function(event) {
+             self.onTouchEnd(event);
+         });
     },
 
     onTouchStart: function (event) {
@@ -63,6 +63,7 @@ cc.Class({
         console.log(this);
         console.log("TOUCH_END endPos.x: " + endPos.x + ",endPos.y: " + endPos.y);
         target.getComponent('pokerPanel')._calcTouchedPokers(this._startPos, endPos);
+        
     },
 
 
@@ -198,23 +199,16 @@ cc.Class({
     _deletePokers: function () {
         //删除所有扑克
         console.log('结束删除所有扑克');
+        this.pokers = [];
         console.log(this.children);
-        if (this.children !== undefined) {
-            if (this.children.length !== 0) {
-                var all = this.children;
+        if (this.node.children !== undefined) {
+            if (this.node.children.length !== 0) {
+                var all = this.node.children;
                 for (var i = 0, len = all.length; i < len; i++) {
-                    if (all[i]._name === "poker") {
-                        all[i].destroy();
-                       console.log('delete');
-                    }
+                       all[i].destroy();
                 }
             }
         }
-    },
-    _testInitPoker: function () {
-
-        var pokers = [0x01, 0x20, 0x30, 0x01, 0x12, 0x12, 0x23, 0x34, 0x15, 0x26, 0x26, 0x27, 0x37, 0x08, 0x29, 0x3A, 0x1B, 0x1C, 0x4D, 0x5E]
-        this._createPokers(pokers);
     },
 
 

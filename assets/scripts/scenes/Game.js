@@ -263,6 +263,7 @@ cc.Class({
         var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         pt.hideAll();//隐藏计时器和不要
         console.log(data);
+        g.handedoutPokers = { seatId: 0, pokers: [] };//把出过的牌池设置为空
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         pokerPanel._deletePokers();
         console.log(g.player.team);

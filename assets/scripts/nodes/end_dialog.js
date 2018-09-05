@@ -31,6 +31,7 @@ cc.Class({
     },
     leave(){
         g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_LEAVE, { cmd: "leave", playerID: g.player.id });
+        g.player.setSeatId(-1);
         cc.director.loadScene("Home");
 
     },
