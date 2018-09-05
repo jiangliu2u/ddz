@@ -4,11 +4,11 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        altas: {
+        win: {
             default: null,
-            type: cc.SpriteAtlas
+            type: cc.Node
         },
-        winOrLose: {
+        lose: {
             default: null,
             type: cc.Node
         },
@@ -27,22 +27,34 @@ cc.Class({
     },
     continue() {
         g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_PREPARED, { cmd: "prepare", playerId: g.player.id });
-        this.node.setScale(0);
+        this.setVisible(false);
     },
-    leave(){
-        g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_LEAVE, { cmd: "leave", playerID: g.player.id });
+    leave() {
+        g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_LEAVE, { cmd: "leave", playerId: g.player.id });
         g.player.setSeatId(-1);
+        this.setVisible(false);
         cc.director.loadScene("Home");
 
     },
     start() {
     },
+    setVisible(v) {
+        this.node.active = v;
+    },
     setWinOrLose(winOrLose) {
         if (winOrLose) {
-            this.winOrLose.spriteFrame = this.altas.getSpriteFrame("ddz_gameover_word_win");
+            this.win.active=true;
+            this.lose.active = false;
+            console.log("show win");
         } else {
-            this.winOrLose.spriteFrame = this.altas.getSpriteFrame("ddz_gameover_lose");
+            this.win.active=false;
+            this.lose.active=true;
+            console.log("show lose");
         }
+    },
+    show(v, winOrlose) {
+        this.setVisible(v);
+        this.setWinOrLose(winOrlose);
     },
     // update (dt) {},
 });

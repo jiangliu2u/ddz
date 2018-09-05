@@ -34,6 +34,9 @@ cc.Class({
 
     },
     start() {
+        this.username.string = "jay"+Math.floor(Math.random()*200);
+        this.password.string = "ay"+Math.floor(Math.random()*20);
+        this.register();
 
     },
     login: function () {

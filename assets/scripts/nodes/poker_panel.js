@@ -40,9 +40,9 @@ cc.Class({
 
         // 手牌点击事件监听
         node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart);
-        node.on(cc.Node.EventType.TOUCH_END, function(event) {
-             self.onTouchEnd(event);
-         });
+        node.on(cc.Node.EventType.TOUCH_END, function (event) {
+            self.onTouchEnd(event);
+        });
     },
 
     onTouchStart: function (event) {
@@ -63,7 +63,7 @@ cc.Class({
         console.log(this);
         console.log("TOUCH_END endPos.x: " + endPos.x + ",endPos.y: " + endPos.y);
         target.getComponent('pokerPanel')._calcTouchedPokers(this._startPos, endPos);
-        
+
     },
 
 
@@ -147,23 +147,28 @@ cc.Class({
             pokers: pInfo
         };
         g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
-        this._neatenPokers(this.pokers);
-        //删除右边玩家之前出的牌并显示倒计时
-        hop.hideRight();
-        pat.rightTimer();
-        g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
         if (this.pokers.length === 0) {
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
             var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
             hop.deleteAll();//删除所有出的牌
+            console.log(end);
+            console.log("gameover");
             var a = cc.find("Canvas/controlPanel").getComponent("control_panel");
             a.setVisible(false);//隐藏出牌按钮
-            var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
-            pt.hideAll();//隐藏计时器和不要
-            var ga = cc.find("Canvas").getComponent("Game");
-            ga.win.play();
+            //var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+            //pt.hideAll();//隐藏计时器和不要
+            var end = cc.find("Canvas/endDialog").getComponent("end_dialog");
+            end.show(true, true);
+            g.player.team = 0;
             // var pokerPanel = cc.find("Canvas/pokerPanel").getComponent('poker_panel');
             // pokerPanel._deletePokers();
+        } else {
+            g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
+            //删除右边玩家之前出的牌并显示倒计时
+            hop.hideRight();
+            pat.rightTimer();
+            this._neatenPokers(this.pokers);
+
         }
 
 
@@ -205,7 +210,7 @@ cc.Class({
             if (this.node.children.length !== 0) {
                 var all = this.node.children;
                 for (var i = 0, len = all.length; i < len; i++) {
-                       all[i].destroy();
+                    all[i].destroy();
                 }
             }
         }

@@ -38,17 +38,14 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        win: {
+        endDialog: {
             default: null,
-            type: cc.Animation
+            type: cc.Node
         },
-        lose: {
-            default: null,
-            type: cc.Animation
-        },
-        faces:{
-            default:[],
-            type:cc.Node
+
+        faces: {
+            default: [],
+            type: cc.Node
         },
         prepareBtn: {
             default: null,
@@ -64,17 +61,17 @@ cc.Class({
 
         common.Protocol.init();
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.onPlayerEnterTable, this);
-        g.handedoutPokers = { seatId: 0, pokers: [] };
+        g.handedoutPokers = { seatId: g.player.seatId, pokers: [] };
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PASS, this.onOtherPass, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DISCARD, this.onOtherDiscard, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_PREPARED, this.onOtherPrepared, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_LEAVE, this.onOtherLeave, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
-        this.faceNodes.getComponent("face_node").createSelf({d:1});
+        this.faceNodes.getComponent("face_node").createSelf({ d: 1 });
         g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
-        this._createDipai([-1,-1,-1]);
+        this._createDipai([-1, -1, -1]);
         g.test = this;
 
     },
@@ -115,8 +112,8 @@ cc.Class({
         this.createFace(data);
     },
     //有玩家离开
-    onOtherLeave(data){
-        if(data['seatId']===g.getLeftPlayerSeatId){
+    onOtherLeave(data) {
+        if (data['seatId'] === g.getLeftPlayerSeatId) {
             this.faceNodes.getComponent("face_node").deleteLeftFace();
         }
         if (data['seatId'] === g.getRightPlayerSeatId) {
@@ -124,7 +121,7 @@ cc.Class({
         }
     },
     //其他玩家准备
-    onOtherPrepared(data){
+    onOtherPrepared(data) {
         //todo
     },
     //其他玩家出牌时，显示其他玩家出的牌
@@ -145,6 +142,10 @@ cc.Class({
                     pat.hideLeftTimer();
                     pat.leftPass();
                     cp.setVisible(true);
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
                 } else {
                     console.log("右边玩家不要");
@@ -165,6 +166,10 @@ cc.Class({
                     cp.setVisible(true);
                     pat.hideLeftTimer();
                     pat.leftPass();
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                     console.log("左边玩家不要");
                     pat.hideSelfPass();
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
@@ -177,6 +182,10 @@ cc.Class({
                     console.log("左边玩家不要");
                     cp.setVisible(true);
                     pat.hideSelfPass();
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
 
                 } else {
@@ -203,6 +212,8 @@ cc.Class({
     },
     //创建新加入的玩家头像
     createFace: function (data) {
+        console.log(data);
+        console.log(this.faceNodes);
         this.faceNodes.getComponent("face_node")._initFace(data);
     },
 
@@ -218,14 +229,14 @@ cc.Class({
 
         var seatId = g.player.seatId;
         var landlord = data["landlord"];
-        if(g.player.seatId===data["landlord"]){
+        if (g.player.seatId === data["landlord"]) {
             pokerPanel._createPokers(data["pokers"].concat(data["dipai"]));
             this._setControlPanelVisible(true);
             g.player.team = 1;
         } else {
             pokerPanel._createPokers(data["pokers"]);
         }
-        
+
         this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
         this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
         this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
@@ -239,6 +250,7 @@ cc.Class({
         this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop._createHandedOutPoker(data);
+
     },
     showPass(loc) {
         this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
@@ -252,26 +264,29 @@ cc.Class({
     zhunbei: function () {
         console.log("prepare clicked");
         g.player.sendMsg(common.EventType.MSG_DDZ_PLAYER_PREPARED, { cmd: "prepare", playerId: g.player.id });
-        this.prepareBtn.active=false;
+        this.prepareBtn.active = false;
     },
     endGame: function (data) {
-
-        var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
-        hop.deleteAll();//删除所有出的牌
-        var a = this.controlPanel.getComponent("control_panel");
-        a.setVisible(false);//隐藏出牌按钮
-        var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
-        pt.hideAll();//隐藏计时器和不要
         console.log(data);
-        g.handedoutPokers = { seatId: 0, pokers: [] };//把出过的牌池设置为空
+        var end = this.endDialog.getComponent("end_dialog");
+        if (data["team"] === g.player.team) {
+            end.show(true, true);
+            console.log("赢了");
+        } else {
+            console.log("输了");
+            end.show(true, false);
+        }
+        console.log("end game");
+        // var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+        // hop.deleteAll();//删除所有出的牌
+        //var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+        //pt.hideAll();//隐藏计时器和不要
+        console.log(data);
+        g.handedoutPokers = { seatId: g.player.seatId, pokers: [] };//把出过的牌池设置为空
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         pokerPanel._deletePokers();
         console.log(g.player.team);
-        if (data["team"] === g.player.team) {
-            this.win.play();
-        } else {
-            this.lose.play();
-        }
+        g.player.team = 0;
     }
 
 });

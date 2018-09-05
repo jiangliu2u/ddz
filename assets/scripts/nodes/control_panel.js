@@ -38,7 +38,7 @@ cc.Class({
             hop.hideSelf();
             this.node.active = true;
         } else {
-            console.log("出牌按钮");
+            console.log("删除闹钟");
             if (this.clock.children.length !== 0) { this.clock.children[0].destroy() };
             this.node.active = false;
         }

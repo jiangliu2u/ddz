@@ -50,6 +50,10 @@ cc.Class({
                     pat.hideLeftTimer();
                     pat.hideSelfPass();
                     this.showPokers(msg["pokers"], this.leftPanel);
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                 } else {
                     //左边玩家显示倒计时
                     this.hideLeft();
@@ -68,6 +72,10 @@ cc.Class({
                     this.hideLeft();
                     this.showPokers(msg["pokers"], this.rightPanel);
                 } else {
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                     console.log("左边玩家出牌");
                     pat.hideSelfPass();
                     cp.setVisible(true);
@@ -82,6 +90,10 @@ cc.Class({
                     pat.hideSelfPass();
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
+                    //todo 直接不要，记得删除
+                    setTimeout(function () {
+                        cp.pass();
+                    }, 100);
                 } else {
                     console.log("右边玩家出牌");
                     pat.leftTimer();
@@ -92,6 +104,7 @@ cc.Class({
                 }
                 break;
         }
+        
     },
     showPokers(pokers, panelNode) {
         this.hide(panelNode);

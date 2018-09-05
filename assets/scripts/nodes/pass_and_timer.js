@@ -26,8 +26,8 @@ cc.Class({
             }
         }
     },
-    leftTimer(){this._showTimer(this.leftPanel)},
-    rightTimer(){this._showTimer(this.rightPanel)},
+    leftTimer() { this._showTimer(this.leftPanel) },
+    rightTimer() { this._showTimer(this.rightPanel) },
     _hideTimer(panelNode) {
         if (panelNode.children.length !== 0) {
             var children = panelNode.children;
@@ -84,12 +84,25 @@ cc.Class({
     hideSelfPass() {
         this._hidePass(this.selfPanel);
     },
-    hideAll(){
-        this.hideLeftPass();
-        this.hideLeftTimer();
+    hideAllPass(){
         this.hideRightPass();
-        this.hideRightTimer();
+        this.hideLeftPass();
         this.hideSelfPass();
+    },
+    hideAll() {
+        var lc = this.leftPanel.children;
+        var rc = this.rightPanel.children;
+        var sc = this.selfPanel.children;
+        for (var i = 0, len = lc.length; i < len; i++) {
+                lc[i].active = false;
+        }
+        for (var i = 0, len = rc.length; i < len; i++) {
+                rc[i].active = false;
+        }
+        for (var i = 0, len = sc.length; i < len; i++) {
+            sc[i].active = false;
+
+        }
     }
     // update (dt) {},
 });
