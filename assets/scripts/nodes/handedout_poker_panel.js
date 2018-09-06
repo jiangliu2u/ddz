@@ -53,7 +53,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                 } else {
                     //左边玩家显示倒计时
                     this.hideLeft();
@@ -75,7 +75,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                     console.log("左边玩家出牌");
                     pat.hideSelfPass();
                     cp.setVisible(true);
@@ -93,7 +93,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                 } else {
                     console.log("右边玩家出牌");
                     pat.leftTimer();

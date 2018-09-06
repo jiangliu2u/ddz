@@ -79,6 +79,9 @@ cc.Class({
     start: function () {
         //this.deletePokerNode('poker');
     },
+    onDestroy(){
+        console.log('destroy');
+    },
     _updateDipai(pokers) {
 
     },
@@ -145,7 +148,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
                 } else {
                     console.log("右边玩家不要");
@@ -169,7 +172,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                     console.log("左边玩家不要");
                     pat.hideSelfPass();
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
@@ -185,7 +188,7 @@ cc.Class({
                     //todo 直接不要，记得删除
                     setTimeout(function () {
                         cp.pass();
-                    }, 100);
+                    }, 50);
                     console.log("删除该不要的玩家出的牌，并左边显示不要");
 
                 } else {

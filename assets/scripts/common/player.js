@@ -33,7 +33,8 @@ Player.prototype = {
         common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ALL_TABLES, data);
     },
     initPlayerInfo(info){
-        this.name = info["name"];
+        this.name = info["username"];
+        this.nickName = info["nickname"];
         this.gender = info["gender"];
         this.coin = info["coin"];
     }

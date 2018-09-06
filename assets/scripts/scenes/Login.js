@@ -15,6 +15,7 @@ cc.Class({
 
     onLoad() {
         this.initSocket();
+        
     },
     initSocket() {
         if (cc.sys.isNative) {
@@ -28,19 +29,19 @@ cc.Class({
         socket.on("yourid", function (data) {
             var id = data['id'];
             g.player = new Player(socket);
+            g.player.id= id;
             g.player.register(common.EventType.RESP_DDZ_REGISTER, self.onRegistered, self);
             g.player.register(common.EventType.RESP_DDZ_LOGIN, self.onLogined, self);
         });
 
     },
     start() {
-        //this.username.string = "jay"+Math.floor(Math.random()*200);
-        //this.password.string = "ay"+Math.floor(Math.random()*20);
-        //this.register();
+        this.username.string = "jay" + Math.floor(Math.random() * 100);
+        this.password.string = '123';
+        this.register();
 
     },
     login: function () {
-        console.log(this.username);
         var username = this.username.string;
         var password = this.password.string;
         if (username.length === 0 || password.length === 0) {
@@ -49,24 +50,31 @@ cc.Class({
         if (password.length > 12) {
             return;
         }
-        var url = "http://127.0.0.1:3001/users/login/";   
+        var url = "http://127.0.0.1:3001/users/login/";
         console.log("username" + username + " password" + password);
         var msg = {};
-        msg.username=username; 
-        msg.password=password;
+        msg.username = username;
+        msg.password = password;
         var json = JSON.stringify(msg);
         var xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.open("POST",url,true);
+        xmlHttpRequest.open("POST", url, true);
         xmlHttpRequest.setRequestHeader("Content-Type", "application/json")
-        xmlHttpRequest.onreadystatechange = this.onLogined;
+        var self = this;
+        xmlHttpRequest.onreadystatechange = function () {
+            if (xmlHttpRequest.status === 200 && xmlHttpRequest.readyState === 4) {
+                self.onLogined(xmlHttpRequest.response)
+            }
+        };
         console.log(JSON.stringify(msg));
-        xmlHttpRequest.send(json);  
+        xmlHttpRequest.send(json);
         //g.player.sendMsg(common.EventType.MSG_DDZ_LOGIN, msg);
     },
     onLogined: function (response) {
 
-        console.log('onLogined');
-
+        console.log('logined');
+        var response = JSON.parse(response);
+        console.log(response);
+        console.log(typeof (response));
         if (!response) {
             console.log('login IS UNDEFINED');
             return;
@@ -84,7 +92,6 @@ cc.Class({
         //cc.director.loadScene("Home");
     },
     register: function () {
-        console.log(this.username);
         var username = this.username.string;
         var password = this.password.string;
         if (username.length === 0 || password.length === 0) {
