@@ -34,9 +34,9 @@ cc.Class({
 
     },
     start() {
-        this.username.string = "jay"+Math.floor(Math.random()*200);
-        this.password.string = "ay"+Math.floor(Math.random()*20);
-        this.register();
+        //this.username.string = "jay"+Math.floor(Math.random()*200);
+        //this.password.string = "ay"+Math.floor(Math.random()*20);
+        //this.register();
 
     },
     login: function () {
@@ -49,16 +49,19 @@ cc.Class({
         if (password.length > 12) {
             return;
         }
+        var url = "http://127.0.0.1:3001/users/login/";   
         console.log("username" + username + " password" + password);
-        var msg = {
-            cmd: 'login',
-            username: username, // 
-            password: password, //
-            token: g.player.id,//socketId
-            socketId: g.player.id
-        };
+        var msg = {};
+        msg.username=username; 
+        msg.password=password;
+        var json = JSON.stringify(msg);
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open("POST",url,true);
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/json")
+        xmlHttpRequest.onreadystatechange = this.onLogined;
         console.log(JSON.stringify(msg));
-        g.player.sendMsg(common.EventType.MSG_DDZ_LOGIN, msg);
+        xmlHttpRequest.send(json);  
+        //g.player.sendMsg(common.EventType.MSG_DDZ_LOGIN, msg);
     },
     onLogined: function (response) {
 
@@ -75,10 +78,10 @@ cc.Class({
             return;
         }
 
-        var player = response['player_info'];
+        var player = response['user_info'];
         g.player.initPlayerInfo(player);
         console.log(player);
-        cc.director.loadScene("Home");
+        //cc.director.loadScene("Home");
     },
     register: function () {
         console.log(this.username);
