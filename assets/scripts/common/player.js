@@ -4,12 +4,19 @@ function Player(socket) {
     this.id = this.socket.id;
     this.accountId = Player.ID;
     Player.ID++;
+    this.status= -1;
     this.seatId = null;
-    this.nickName = "jdakfdja;";
+    this.nickname = "jdakfdja;";
     this.coin = Math.random() * 10000;
-    this.gender = Player.GENDER.SECRET;
+    this.gender = 3;
 }
 Player.prototype = {
+    initPlayerInfo(info) {
+        this.name = info["username"];
+        this.nickName = info["nickname"];
+        this.gender = info["gender"];
+        this.coin = info["coin"];
+    },
     sendMsg: function (cmd, msg, handler) {
         console.log();
         this.socket.emit(cmd, msg, handler);
@@ -17,7 +24,6 @@ Player.prototype = {
     joinTable: function (tableId) {
         this.socket.join(tableId);
     },
-
     register: function (cmd, callback, scope) {
         var self = this;
         this.socket.on(cmd, function (data) {
@@ -32,12 +38,7 @@ Player.prototype = {
     connected(data) {
         common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ALL_TABLES, data);
     },
-    initPlayerInfo(info){
-        this.name = info["username"];
-        this.nickName = info["nickname"];
-        this.gender = info["gender"];
-        this.coin = info["coin"];
-    }
+    
 };
 Player.GENDER = {
     MALE: 1,

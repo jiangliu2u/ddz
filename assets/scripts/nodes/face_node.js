@@ -33,7 +33,6 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     _initFace: function (data) {
         //自己
-        console.log(data["allPlayers"]);
         if (data["allPlayers"] === undefined && data["seatId"] === undefined) {
             g.player.setSeatId(0);
             console.log("all players空的自己的座位号" + 0);
@@ -104,9 +103,9 @@ cc.Class({
         faceItem3.setPosition(cc.v2(0, 0));
     },
     createSelf(data) {
-        console.log("自己");
+        console.log(g.player);
         var faceItem3 = cc.instantiate(this.faceControllerPref);
-        faceItem3.getComponent('facecontroller').initFace("selfName", 99999, 3);
+        faceItem3.getComponent('facecontroller').initFace(g.player.name||"哈哈", g.player.coin, 3);
         this.selfFaceNode.addChild(faceItem3);
         faceItem3.setPosition(cc.v2(0, 0))
     },

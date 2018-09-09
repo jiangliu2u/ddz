@@ -50,6 +50,10 @@ cc.Class({
         prepareBtn: {
             default: null,
             type: cc.Node
+        },
+        call_landlord: {
+            default: null,
+            type: cc.Node
         }
 
     },
@@ -64,22 +68,29 @@ cc.Class({
         g.handedoutPokers = { seatId: g.player.seatId, pokers: [] };
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DEAL_POKER, this._createHandPoker, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PASS, this.onOtherPass, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_START, this.onStart, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_CALL_LANDLORD, this.onOtherCallLandlord, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_NO_CALL_LANDLORD, this.onOtherNoCallLandlord, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_ROB_LANDLORD, this.onOtherRobLandlord, this);
+        common.EventDispatcher.listen(common.EventType.MSG_DDZ_NO_ROB_LANDLORD, this.onOtherNoRobLandlord, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_DISCARD, this.onOtherDiscard, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_PREPARED, this.onOtherPrepared, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_LEAVE, this.onOtherLeave, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
-        this.faceNodes.getComponent("face_node").createSelf({ d: 1 });
+        this.faceNodes.getComponent("face_node").createSelf();
         g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
         this._createDipai([-1, -1, -1]);
-        g.test = this;
+        this.call_and_rob = this.call_landlord.getComponent("call_landlord");
+        g.player.status = 1;
+        g.game = this;
 
     },
 
     start: function () {
         //this.deletePokerNode('poker');
     },
-    onDestroy(){
+    onDestroy() {
         console.log('destroy');
     },
     _updateDipai(pokers) {
@@ -127,6 +138,75 @@ cc.Class({
     onOtherPrepared(data) {
         //todo
     },
+    onStart(data) {
+        this.call_and_rob.hideAll();
+        var pokerPanel = this.pokerPanel.getComponent('poker_panel');
+        //var fn = this.faceNodes.getComponent("face_node");
+        var seatId = g.player.seatId;
+        var landlord = data["landlord"];
+        if (g.player.seatId === data["landlord"]) {
+            this._setControlPanelVisible(true);
+            g.player.team = 1;
+            pokerPanel.addPokers(this.dipai);
+        } else {
+            g.player.team = 0;
+        }
+        this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
+        this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
+        this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
+        this._createDipai(this.dipai);
+    },
+    onOtherCallLandlord(data) {
+        
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId'] &&) {
+            this.call_and_rob.showOtherCall(1);
+            this.call_and_rob.showRobBtn();
+            console.log('左边');
+        } else {
+            this.call_and_rob.showOtherCall(0);
+            console.log('右边');
+        }
+    },
+    onOtherNoCallLandlord(data) {
+        
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+            this.call_and_rob.showRobBtn();
+            
+            this.call_and_rob.showOtherNoCall(1);
+        } else {
+            this.call_and_rob.showOtherNoCall(0);
+        }
+    },
+    onOtherRobLandlord(data) {
+        
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+            if (g.player.status === 0) {
+                var msg = {
+                    cmd: 'no_rob_landlord',
+                    playerId: g.player.id,
+                    status: g.player.status
+                }
+                g.player.sendMsg(common.EventType.MSG_DDZ_NO_ROB_LANDLORD, msg);
+            }
+            this.call_and_rob.showRobBtn();
+
+            this.call_and_rob.showOtherRob(1);
+        } else {
+            this.call_and_rob.showOtherRob(0);
+        }
+    },
+    onOtherNoRobLandlord(data) {
+        
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+            this.call_and_rob.showRobBtn();
+
+            this.call_and_rob.showOtherNoRob(1);
+        } else {
+            this.call_and_rob.showOtherNoRob(0);
+        }
+    },
+
+
     //其他玩家出牌时，显示其他玩家出的牌
     onOtherDiscard(data) {
         this._createHandedOutPoker(data);
@@ -215,8 +295,6 @@ cc.Class({
     },
     //创建新加入的玩家头像
     createFace: function (data) {
-        console.log(data);
-        console.log(this.faceNodes);
         this.faceNodes.getComponent("face_node")._initFace(data);
     },
 
@@ -229,22 +307,11 @@ cc.Class({
         console.log("开始发牌");
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         var fn = this.faceNodes.getComponent("face_node");
-
-        var seatId = g.player.seatId;
-        var landlord = data["landlord"];
-        if (g.player.seatId === data["landlord"]) {
-            pokerPanel._createPokers(data["pokers"].concat(data["dipai"]));
-            this._setControlPanelVisible(true);
-            g.player.team = 1;
-        } else {
-            pokerPanel._createPokers(data["pokers"]);
+        pokerPanel._createPokers(data["pokers"]);
+        this.dipai = data['dipai'];
+        if (data['startP'] === g.player.seatId) {
+            this.call_and_rob.showCallBtn();
         }
-
-        this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
-        this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
-        this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
-        this._createDipai(data["dipai"]);
-
 
     },
     //显示其他玩家出的牌

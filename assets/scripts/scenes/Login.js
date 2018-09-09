@@ -100,7 +100,6 @@ cc.Class({
         if (password.length > 12) {
             return;
         }
-        console.log("username" + username + " password" + password);
         var msg = {
             cmd: 'register',
             username: username, // 

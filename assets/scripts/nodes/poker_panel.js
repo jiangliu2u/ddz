@@ -192,6 +192,18 @@ cc.Class({
             this.pokers.push(pokerPrefab);
         }
     },
+    addPokers(pokers) {
+        for (var i = 0, len = pokers.length; i < len; i++) {
+            var pokerPrefab = cc.instantiate(this.poker);
+            var script = pokerPrefab.getComponent("poker");
+            script.initPoker(pokers[i]);
+            pokerPrefab._name = pokers[i] + "";
+            pokerPrefab.setPosition(cc.v2(0, 0));
+            this.node.addChild(pokerPrefab);
+            this.pokers.push(pokerPrefab);
+        }
+        this._neatenPokers(this.pokers);
+    },
     //整理牌
     _neatenPokers: function (pokers) {
         var len = pokers.length;
