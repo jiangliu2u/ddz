@@ -43,7 +43,11 @@ PokerPlay.prototype.getPokerWrapper = function (pokerList) {
     if (!pokerList || pokerList.length == 0)
         throw 'wrong poker length';
     let pokerWrapper = new PokerWrapper(pokerList);
-    if (pokerList.length == 2 && (pokerList[0] >> 4) == 4 && (pokerList[1] >> 4) == 5) {
+    console.log('判断牌型');
+    console.log(pokerList);
+    console.log(pokerList[0] >> 4);
+    console.log(pokerList[1] >> 4);
+    if (pokerList.length == 2 && (pokerList[0] >> 4) === 5 && (pokerList[1] >> 4) === 4) {
         pokerWrapper.headValue = 'g';
         pokerWrapper.pokerType = "wangzha";
         return pokerWrapper;
