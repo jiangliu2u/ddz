@@ -157,10 +157,11 @@ cc.Class({
         this._createDipai(this.dipai);
     },
     onOtherCallLandlord(data) {
-        
-        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId'] &&) {
-            this.call_and_rob.showOtherCall(1);
+        if(data['toshow']===g.player.seatId){
             this.call_and_rob.showRobBtn();
+        }
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+            this.call_and_rob.showOtherCall(1);
             console.log('左边');
         } else {
             this.call_and_rob.showOtherCall(0);
@@ -168,9 +169,10 @@ cc.Class({
         }
     },
     onOtherNoCallLandlord(data) {
-        
-        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+        if(data['toshow']===g.player.seatId){
             this.call_and_rob.showRobBtn();
+        }
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
             
             this.call_and_rob.showOtherNoCall(1);
         } else {
@@ -178,7 +180,9 @@ cc.Class({
         }
     },
     onOtherRobLandlord(data) {
-        
+        if(data['toshow']===g.player.seatId){
+            this.call_and_rob.showRobBtn();
+        }
         if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
             if (g.player.status === 0) {
                 var msg = {
@@ -188,7 +192,6 @@ cc.Class({
                 }
                 g.player.sendMsg(common.EventType.MSG_DDZ_NO_ROB_LANDLORD, msg);
             }
-            this.call_and_rob.showRobBtn();
 
             this.call_and_rob.showOtherRob(1);
         } else {
@@ -196,9 +199,10 @@ cc.Class({
         }
     },
     onOtherNoRobLandlord(data) {
-        
-        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
+        if(data['toshow']===g.player.seatId){
             this.call_and_rob.showRobBtn();
+        }
+        if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
 
             this.call_and_rob.showOtherNoRob(1);
         } else {

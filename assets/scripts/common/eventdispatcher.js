@@ -25,6 +25,7 @@ const common = require('_init');
         },
 
         trigger: function (eventName, params) {
+            console.log(params);
             if (!eventName) {
                 console.log(eventName);
 
