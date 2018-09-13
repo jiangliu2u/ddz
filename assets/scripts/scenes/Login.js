@@ -15,7 +15,6 @@ cc.Class({
 
     onLoad() {
         this.initSocket();
-        
     },
     initSocket() {
         if (cc.sys.isNative) {
@@ -23,22 +22,26 @@ cc.Class({
         } else {
             var io = require('../common/socket.io');
         }
-        var socket = io.connect('http://127.0.0.1:3001');
-        // var socket = io.connect('http://192.168.1.8:9999');
+        // var socket = io.connect('http://127.0.0.1:3001');
+        var socket = io.connect('http://192.168.1.6:3001');
         var self = this;
         socket.on("yourid", function (data) {
             var id = data['id'];
             g.player = new Player(socket);
-            g.player.id= id;
+            g.player.id = id;
             g.player.register(common.EventType.RESP_DDZ_REGISTER, self.onRegistered, self);
             g.player.register(common.EventType.RESP_DDZ_LOGIN, self.onLogined, self);
         });
 
     },
     start() {
-        this.username.string = "jay" + Math.floor(Math.random() * 100);
-        this.password.string = '123';
-        this.register();
+        var self = this;
+        setTimeout(function () {
+            self.username.string = "jay" + Math.floor(Math.random() * 100);
+            self.password.string = '123';
+            self.register();
+        }, 1000)
+
 
     },
     login: function () {

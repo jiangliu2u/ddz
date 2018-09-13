@@ -12,16 +12,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        selfFaceNode: {
-            default: null,
-            type: cc.Node
-        },
-        leftFaceNode: {
-            default: null,
-            type: cc.Node
-        },
-        rightFaceNode: {
-            default: null,
+        faces: {
+            default: [],
             type: cc.Node
         },
         faceControllerPref: {
@@ -32,25 +24,18 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
     _initFace: function (data) {
-        //自己
-        if (data["allPlayers"] === undefined && data["seatId"] === undefined) {
-            g.player.setSeatId(0);
-            console.log("all players空的自己的座位号" + 0);
-            g.handedoutPokers = { seatId: 0, pokers: [] };
-        }
+        console.log(data);
         if (data["allPlayers"]) {//加入桌子时获取已经加入的玩家
             console.log("获取已经加入的玩家...");
             switch (data["allPlayers"].length) {
                 case 0:
-                    //没执行
+                    console.log("case 0 获取已经加入的玩家，自己的座位号" + 0);
                     g.player.setSeatId(0);
                     g.handedoutPokers = { seatId: 0, pokers: [] };
-                    console.log("case 0 获取已经加入的玩家，自己的座位号" + 0);
                     break;
                 case 1:
                     g.player.setSeatId(1);
                     g.handedoutPokers = { seatId: 1, pokers: [] };
-
                     console.log("case 1 获取已经加入的玩家，自己的座位号" + 1);
                     this._createLeft(data["allPlayers"][0]);
                     break;
@@ -64,65 +49,41 @@ cc.Class({
             }
 
         }
-        if (data["seatId"]) {
-            console.log("有新玩家加入...");
-            console.log(data);
-            switch (data["seatId"]) {
-                case 1:
-                    console.log("case 1 新玩家加入，自己的座位号" + g.player.seatId);
-                    this._createRight(data);
-                    break;
-                case 2:
-                    console.log("case 2 新玩家加入，自己的座位号" + g.player.seatId);
-                    if (g.player.seatId === 0) {
-                        this._createLeft(data);
-                    }
-                    if (g.player.seatId === 1) {
-                        this._createRight(data);
-                    }
-                    console.log("第三个玩家");
-                    console.log(data);
-                    break;
-            }
-        }
-
     },
     _createLeft: function (data) {
         console.log("左边玩家");
-
         var faceItem4 = cc.instantiate(this.faceControllerPref);
-        faceItem4.getComponent('facecontroller').initFace("leftPName" + 1,99999, 2);
-        this.leftFaceNode.addChild(faceItem4);
+        faceItem4.getComponent('facecontroller').initFace("leftPName" + 1, 99999, 2);
+        this.faces[2].addChild(faceItem4);
         faceItem4.setPosition(cc.v2(0, 0));
     },
     _createRight: function (data) {
         console.log("右边玩家");
         var faceItem3 = cc.instantiate(this.faceControllerPref);
         faceItem3.getComponent('facecontroller').initFace("rightPName", 99999, 3);
-        this.rightFaceNode.addChild(faceItem3);
+        this.faces[1].addChild(faceItem3);
         faceItem3.setPosition(cc.v2(0, 0));
     },
     createSelf(data) {
-        console.log(g.player);
-        var faceItem3 = cc.instantiate(this.faceControllerPref);
-        faceItem3.getComponent('facecontroller').initFace(g.player.name||"哈哈", g.player.coin, 3);
-        this.selfFaceNode.addChild(faceItem3);
-        faceItem3.setPosition(cc.v2(0, 0))
+        var faceItem1 = cc.instantiate(this.faceControllerPref);
+        faceItem1.getComponent('facecontroller').initFace(g.player.name || "哈哈", g.player.coin, 3);
+        this.faces[0].addChild(faceItem1);
+        faceItem1.setPosition(cc.v2(0, 0))
     },
-    _changeFace(facePanel,isFarmer){
+    _changeFace(facePanel, isFarmer) {
         facePanel.children[0].getComponent("facecontroller").changeFace(isFarmer);
     },
-    
-    changeLeft(isFarmer){
-        this._changeFace(this.leftFaceNode,isFarmer);
+
+    changeLeft(isFarmer) {
+        this._changeFace(this.leftFaceNode, isFarmer);
     },
-    changeRight(isFarmer){
-        this._changeFace(this.rightFaceNode,isFarmer);
+    changeRight(isFarmer) {
+        this._changeFace(this.rightFaceNode, isFarmer);
     },
-    changeSelf(isFarmer){
-        this._changeFace(this.selfFaceNode,isFarmer);
+    changeSelf(isFarmer) {
+        this._changeFace(this.selfFaceNode, isFarmer);
     },
-    deleteLeftFace(){
+    deleteLeftFace() {
         this.leftFaceNode.children[0].destroy();
     },
     deleteRightFace() {

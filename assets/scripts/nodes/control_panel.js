@@ -31,14 +31,13 @@ cc.Class({
         if (v) {
             var clock = cc.instantiate(this.clockPrefb);
             this.clock.addChild(clock);
-            clock.setPosition(cc.v2(0,0));
+            clock.setPosition(cc.v2(0, 0));
             var clockScript = clock.getComponent("clock");
             clockScript.startCountdown(20);
             var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
             hop.hideSelf();
             this.node.active = true;
         } else {
-            console.log("删除闹钟");
             if (this.clock.children.length !== 0) { this.clock.children[0].destroy() };
             this.node.active = false;
         }
@@ -48,7 +47,7 @@ cc.Class({
     discard() {
         var pp = this.pokerPanel.getComponent("poker_panel");
         var pokers = pp.getSelectedPokers();
-        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
+        var pt = cc.find("Canvas/passTag").getComponent("passTag");
         var ps = [];
         for (var i = 0; i < pokers.length; i++) {
             ps.push(pokers[i].getComponent("poker").value);
@@ -108,9 +107,9 @@ cc.Class({
                 var pp = this.pokerPanel.getComponent("poker_panel");
                 pp._onPass();
                 console.log("不要");
-                var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
-                pat.rightTimer();
-                pat.selfPass();
+                var pt = cc.find("Canvas/passTag").getComponent("passTag");
+                // pat.rightTimer();
+                pt.showSelfPass();
                 this.setVisible(false);
             }
         }

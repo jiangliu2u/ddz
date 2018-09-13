@@ -40,15 +40,12 @@ cc.Class({
     },
     _createHandedOutPoker: function (msg) {
         console.log(msg);
-        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         let cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
         switch (msg["seatId"]) {
             case 0:
                 if (g.player.seatId === 1) {
                     console.log("左边玩家出牌");
                     cp.setVisible(true);
-                    pat.hideLeftTimer();
-                    pat.hideSelfPass();
                     this.showPokers(msg["pokers"], this.leftPanel);
                     //todo 直接不要，记得删除
                     setTimeout(function () {
@@ -57,8 +54,6 @@ cc.Class({
                 } else {
                     //左边玩家显示倒计时
                     this.hideLeft();
-                    pat.leftTimer();
-                    pat.hideRightTimer();
                     console.log("右边玩家出牌");
                     this.showPokers(msg["pokers"], this.rightPanel);
                 }
@@ -67,8 +62,6 @@ cc.Class({
                 if (g.player.seatId === 0) {
                     console.log("右边玩家出牌");
                     //左边玩家显示倒计时
-                    pat.leftTimer();
-                    pat.hideRightTimer();
                     this.hideLeft();
                     this.showPokers(msg["pokers"], this.rightPanel);
                 } else {
@@ -77,17 +70,13 @@ cc.Class({
                         cp.pass();
                     }, 50);
                     console.log("左边玩家出牌");
-                    pat.hideSelfPass();
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
-                    pat.hideLeftTimer();
                 }
                 break;
             case 2:
                 if (g.player.seatId === 0) {
                     console.log("左边玩家出牌");
-                    pat.hideLeftTimer();
-                    pat.hideSelfPass();
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
                     //todo 直接不要，记得删除
@@ -96,8 +85,6 @@ cc.Class({
                     }, 50);
                 } else {
                     console.log("右边玩家出牌");
-                    pat.leftTimer();
-                    pat.hideRightTimer();
                     this.hideLeft();
                     //左边玩家显示倒计时,删除之前
                     this.showPokers(msg["pokers"], this.rightPanel);
@@ -122,8 +109,6 @@ cc.Class({
     },
     //删除扑克
     hide(panelNode) {
-        console.log(panelNode);
-        console.log(panelNode.children);
         if (panelNode.children !== undefined) {
             if (panelNode.children.length !== 0) {
                 var children = panelNode.children;

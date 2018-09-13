@@ -10,6 +10,7 @@ const common = require('_init');
 
         init: function () {
             this._onEnterTable();
+            this._onPlayerEnterTable();
             this._onDealPoker();
             this._onDiscard();
             this._onPass();
@@ -35,6 +36,11 @@ const common = require('_init');
         _onEnterTable: function () {
             g.player.register(common.EventType.MSG_DDZ_ENTER_TABLE, function (data) {
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_ENTER_TABLE, data);
+            });
+        },
+        _onPlayerEnterTable: function () {
+            g.player.register(common.EventType.MSG_DDZ_NEW_PLAYER, function (data) {
+                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_NEW_PLAYER, data);
             });
         },
         _onStart: function () {

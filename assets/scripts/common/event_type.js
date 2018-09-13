@@ -7,6 +7,7 @@ const common = require('_init');
              * 发送的data格式{cmd:"",playerId:socket.id,pokers:[]}
              * 接收的data格式{seatId:1,pokers:[]}
              */
+        MSG_DDZ_NEW_PLAYER:'MSG_DDZ_NEW_PLAYER',
         MSG_DDZ_ENTER_TABLE: "MSG_DDZ_ENTER_TABLE",
         MSG_DDZ_ALL_PLAYERS: "MSG_DDZ_ALL_PLAYERS",
         MSG_DDZ_ALL_TABLES: "MSG_DDZ_ALL_TABLES",

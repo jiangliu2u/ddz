@@ -125,7 +125,6 @@ cc.Class({
      */
     _onDiscard: function (pokers) {
         console.log(pokers);
-        var pat = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
         var pokersToDel = [];
         var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
         for (var i = 0, len = pokers.length; i < len; i++) {
@@ -151,22 +150,19 @@ cc.Class({
             g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
             var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
             hop.deleteAll();//删除所有出的牌
-            console.log(end);
-            console.log("gameover");
             var a = cc.find("Canvas/controlPanel").getComponent("control_panel");
             a.setVisible(false);//隐藏出牌按钮
-            //var pt = cc.find("Canvas/passAndTimer").getComponent("pass_and_timer");
-            //pt.hideAll();//隐藏计时器和不要
+            var pt = cc.find("Canvas/passTag").getComponent("passTag");
+            pt.hidePasses();//隐藏不要
+            var pokerPanel = cc.find("Canvas/pokerPanel").getComponent('poker_panel');
+            pokerPanel._deletePokers();//删除出的手牌
             var end = cc.find("Canvas/endDialog").getComponent("end_dialog");
             end.show(true, true);
             g.player.team = 0;
-            // var pokerPanel = cc.find("Canvas/pokerPanel").getComponent('poker_panel');
-            // pokerPanel._deletePokers();
         } else {
             g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
             //删除右边玩家之前出的牌并显示倒计时
             hop.hideRight();
-            pat.rightTimer();
             this._neatenPokers(this.pokers);
 
         }
@@ -217,7 +213,6 @@ cc.Class({
         //删除所有扑克
         console.log('结束删除所有扑克');
         this.pokers = [];
-        console.log(this.children);
         if (this.node.children !== undefined) {
             if (this.node.children.length !== 0) {
                 var all = this.node.children;

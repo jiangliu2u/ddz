@@ -35,8 +35,10 @@ cc.Class({
     changeFace(isLandlord){
         if (isLandlord){
             this.faceSpr.spriteFrame = this.FACE_MAP[1];
+            console.log('地主头像');
         }else{
             this.faceSpr.spriteFrame = this.FACE_MAP[0];
+            console.log('农民头像');
         }
     },
     start () {
