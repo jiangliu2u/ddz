@@ -22,6 +22,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        handedOutPokerPanel: {
+            default: null,
+            type: cc.Node
+        },
         pokerCard: {
             default: null,
             type: cc.Prefab
@@ -57,7 +61,7 @@ cc.Class({
             type: cc.Node
         },
 
-        call_landlord: {
+        callLandlord: {
             default: null,
             type: cc.Node
         }
@@ -73,6 +77,10 @@ cc.Class({
         this.passNode.addComponent('passTag');//动态添加显示玩家不出提示的脚本
         this.faceNodes = cc.find('Canvas/faceNode');
         this.faceNodes.addComponent('face_node');
+        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
+        this.handedOutPokerPanel.addComponent('handedout_poker_panel');
+        this.callLandlord = cc.find('Canvas/callLandlord');
+        this.callLandlord.addComponent('call_landlord');
         this.pokerPanel = cc.find('Canvas/pokerPanel');
         this.pokerPanel.addComponent('poker_panel');
         common.Protocol.init();
@@ -92,8 +100,8 @@ cc.Class({
         this.faceNodes.getComponent("face_node").createSelf();
         g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
+        this.call_and_rob = this.callLandlord.getComponent('call_landlord');
         this._createDipai([-1, -1, -1]);
-        this.call_and_rob = this.call_landlord.getComponent("call_landlord");
         g.player.status = 1;
         g.game = this;
 
@@ -164,17 +172,27 @@ cc.Class({
     },
     //有玩家离开
     onOtherLeave(data) {
-        if (data['seatId'] === g.getLeftPlayerSeatId) {
-            this.faceNodes.getComponent("face_node").deleteLeftFace();
-        }
-        if (data['seatId'] === g.getRightPlayerSeatId) {
-            this.faceNodes.getComponent("face_node").deleteRightFace();
+        switch (data['seatId']) {
+            case 0:
+                g.player.setSeatId(g.player.seatId - 1);
+                break;
+            case 1:
+                if (g.player.seatId === 0) {
+
+                } else {
+                    g.player.setSeatId(1);
+                }
+                break;
+            case 2:
+                break;
+
         }
     },
     //其他玩家准备
     onOtherPrepared(data) {
         //todo
     },
+    //游戏开始
     onStart(data) {
         this.call_and_rob.hideAll();
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
@@ -193,6 +211,7 @@ cc.Class({
         this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
         this._createDipai(this.dipai);
     },
+    //其他人叫地主
     onOtherCallLandlord(data) {
         if (data['toshow'] === g.player.seatId) {
             this.call_and_rob.showRobBtn();
@@ -205,6 +224,7 @@ cc.Class({
             console.log('右边');
         }
     },
+    //别人不叫地主
     onOtherNoCallLandlord(data) {
         if (data['toshow'] === g.player.seatId) {
             this.call_and_rob.showRobBtn();
@@ -216,6 +236,7 @@ cc.Class({
             this.call_and_rob.showOtherNoCall(0);
         }
     },
+    //别人不抢地主
     onOtherRobLandlord(data) {
         if (data['toshow'] === g.player.seatId) {
             this.call_and_rob.showRobBtn();
@@ -231,6 +252,7 @@ cc.Class({
             this.call_and_rob.showOtherRob(0);
         }
     },
+    //别人不抢地主
     onOtherNoRobLandlord(data) {
         if (data['toshow'] === g.player.seatId) {
             this.call_and_rob.showRobBtn();
@@ -281,13 +303,7 @@ cc.Class({
 
         }
     },
-    /**
-     * 0表示自己节点坐标(-570,-250)
-     * 1表示左边的玩家,节点坐标(-570,90)
-     * 2表示右边的玩家,节点坐标(604,90)
-     */
 
-    //创建新加入的玩家头像
 
 
 
@@ -309,13 +325,12 @@ cc.Class({
     //显示其他玩家出的牌
     _createHandedOutPoker: function (data) {
         console.log("座位号 " + data['seatId'] + "得玩家出牌");
-        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
+
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop._createHandedOutPoker(data);
 
     },
     showPass(loc) {
-        this.handedOutPokerPanel = cc.find("Canvas/handedOutPokerPanel");
         var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         switch (loc) {
             case "left":
@@ -339,7 +354,7 @@ cc.Class({
             end.show(true, false);
         }
         console.log("end game");
-        var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+        var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
         hop.deleteAll();//删除所有出的牌
         var pt = cc.find("Canvas/passTag").getComponent("passTag");
         pt.hidePasses();//隐藏不要
@@ -349,7 +364,7 @@ cc.Class({
         console.log(g.player.team);
         g.player.team = 0;
     },
-    onDestroy(){
+    onDestroy() {
         //解绑
         common.EventDispatcher.ignore(common.EventType.MSG_DDZ_ENTER_TABLE, this.onEnterTable, this);
         common.EventDispatcher.ignore(common.EventType.MSG_DDZ_NEW_PLAYER, this.onPlayerEnterTable, this);

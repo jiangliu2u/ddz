@@ -15,6 +15,7 @@ const common = require('_init');
             this._onDiscard();
             this._onPass();
             this._onAllPlayers();
+            this._onPlayerLeave()
             this._onEndGame();
             this._onCallLandlord();
             this._onNoCallLandlord();
@@ -86,6 +87,11 @@ const common = require('_init');
         _onEndGame: function () {
             g.player.register(common.EventType.MSG_DDZ_GAME_OVER, function (data) {
                 common.EventDispatcher.trigger(common.EventType.MSG_DDZ_GAME_OVER, data);
+            });
+        },
+        _onPlayerLeave: function () {
+            g.player.register(common.EventType.MSG_DDZ_PLAYER_LEAVE, function (data) {
+                common.EventDispatcher.trigger(common.EventType.MSG_DDZ_PLAYER_LEAVE, data);
             });
         },
         _onTest: function () {
