@@ -17,31 +17,32 @@ cc.Class({
         faceSpr: {
             default: null,
             type: cc.Sprite
-        }
+        },
+        
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-        
+    onLoad() {
+
     },
 
-    initFace: function(name, coin, num) {
+    initFace: function (name, coin, num) {
         this.nameLbl.string = name;
         this.coinLbl.string = coin + '';
         // var spriteFrame =
         this.faceSpr.spriteFrame = this.FACE_MAP[num];
     },
-    changeFace(isLandlord){
-        if (isLandlord){
+    changeFace(isLandlord) {
+        if (isLandlord) {
             this.faceSpr.spriteFrame = this.FACE_MAP[1];
             console.log('地主头像');
-        }else{
+        } else {
             this.faceSpr.spriteFrame = this.FACE_MAP[0];
             console.log('农民头像');
         }
     },
-    start () {
+    start() {
 
     },
 

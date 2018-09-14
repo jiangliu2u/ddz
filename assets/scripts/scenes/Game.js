@@ -158,6 +158,7 @@ cc.Class({
         // 转换seatId
         console.log('enter table');
         var self = this;
+        
         setTimeout(function () {
             self.createFace(data);
         }, 50);
@@ -206,9 +207,11 @@ cc.Class({
         } else {
             g.player.team = 0;
         }
-        this.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
-        this.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
-        this.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
+        //landlord1
+        var fn = cc.find('Canvas/faceNode').getComponent('face_node');
+        fn.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
+        fn.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
+        fn.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
         this._createDipai(this.dipai);
     },
     //其他人叫地主
@@ -318,7 +321,7 @@ cc.Class({
         pokerPanel._createPokers(data["pokers"]);
         this.dipai = data['dipai'];
         if (data['startP'] === g.player.seatId) {
-            cc.find('Canvas/callLandlord').getComponent("call_landlord").showCallBtn();
+            this.call_and_rob.showCallBtn();
         }
 
     },

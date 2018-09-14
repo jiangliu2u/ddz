@@ -24,8 +24,9 @@ cc.Class({
 
     },
     init(){
-        this.controlPanel[0] = cc.find('Canvas/controlPanel/callBtn');
-        this.controlPanel[1] = cc.find('Canvas/controlPanel/robBtn');
+        console.log('call landlord init');
+        this.controlPanel[0] = cc.find('Canvas/callLandlord/controlPanel/callBtn');
+        this.controlPanel[1] = cc.find('Canvas/callLandlord/controlPanel/robBtn');
         this.showPanel[0] = cc.find('Canvas/callLandlord/selfPanel');
         this.showPanel[1] = cc.find('Canvas/callLandlord/rightPanel');
         this.showPanel[2] = cc.find('Canvas/callLandlord/leftPanel');
