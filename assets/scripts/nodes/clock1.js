@@ -25,9 +25,16 @@ cc.Class({
         }
         this.node.active = v;
     },
+    onEnable(){
+        this.startCountdown(15);
+    },
+    onDisable(){
+        this.stopCountdown();
+    },
     _scheduleClock: function () {
         this._countdown--;
         if (this._countdown < 0) {
+            
             this.stopCountdown();
             return;
         }

@@ -23,15 +23,26 @@ cc.Class({
         if (v) {
             console.log("set true");
             this._doShow();
-            this.startCountdown(15);
+            this.startCountdown(5);
         }else{
             this._doHide();
         }
     },
     _scheduleClock: function () {
         this._countdown--;
-        if (this._countdown < 0) {
+        if (this._countdown < 0) {//倒计时结束，自动不要或者出牌
+            console.log("倒计时结束");
             this.stopCountdown();
+            if (g.handedoutPokers["pokers"].length === 0 || g.handedoutPokers["seatId"] === g.player.seatId){
+                var pp = cc.find("Canvas/pokerPanel").getComponent("poker_panel");
+                pp.autoDiscard();
+            }else{
+                var cp = cc.find("Canvas/controlPanel").getComponent("control_panel");
+                setTimeout(function () {
+                    cp.pass();
+                }, 50);
+            }
+            
             return;
         }
         this._doSetCountdown(this._countdown);

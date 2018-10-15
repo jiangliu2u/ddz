@@ -64,8 +64,11 @@ cc.Class({
         callLandlord: {
             default: null,
             type: cc.Node
+        },
+        timerPanel:{
+            default:null,
+            type:cc.Node
         }
-
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -83,6 +86,8 @@ cc.Class({
         this.callLandlord.addComponent('call_landlord');
         this.pokerPanel = cc.find('Canvas/pokerPanel');
         this.pokerPanel.addComponent('poker_panel');
+        this.timerPanel = cc.find('Canvas/timerPanel');
+        this.timerPanel.addComponent('timer_panel');
         common.Protocol.init();
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_ENTER_TABLE, this.onEnterTable, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_NEW_PLAYER, this.onPlayerEnterTable, this);
@@ -209,9 +214,9 @@ cc.Class({
         }
         //landlord1
         var fn = cc.find('Canvas/faceNode').getComponent('face_node');
-        fn.faces[0].children[0].getComponent("facecontroller").changeFace(landlord === seatId);
-        fn.faces[1].children[0].getComponent("facecontroller").changeFace(landlord === g.getRightPlayerSeatId(seatId));
-        fn.faces[2].children[0].getComponent("facecontroller").changeFace(landlord === g.getLeftPlayerSeatId(seatId));
+        fn.changeSelf(landlord === seatId);
+        fn.changeRight(landlord === g.getRightPlayerSeatId(seatId));
+        fn.changeLeft(landlord === g.getLeftPlayerSeatId(seatId));
         this._createDipai(this.dipai);
     },
     //其他人叫地主
@@ -276,8 +281,12 @@ cc.Class({
         g.handedoutPokers = { seatId: data["seatId"], pokers: data["pokers"] };
         if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
             pt.hideLeftPass();
+            cc.find("Canvas/passTag").getComponent("passTag").hideSelfPass();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").hideLeftTimer();
         } else {
             pt.hideRightPass();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").showLeftTimer();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").hideRightTimer();
         }
     },
     //其他玩家不要时
@@ -289,18 +298,21 @@ cc.Class({
         if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
             console.log("左边玩家不要");
             pt.hideSelfPass();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").hideLeftTimer();
+            cc.find("Canvas/passTag").getComponent("passTag").hideSelfPass();
             // pat.hideLeftTimer();
             pt.showLeftPass();
             cp.setVisible(true);
             //todo 直接不要，记得删除
-            setTimeout(function () {
-                cp.pass();
-            }, 50);
+            // setTimeout(function () {
+            //     cp.pass();
+            // }, 50);
             console.log("删除该不要的玩家出的牌，并左边显示不要");
         } else {
             console.log("右边玩家不要");
-            // pat.hideRightTimer();
-            // pat.leftTimer();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").showLeftTimer();
+            cc.find("Canvas/timerPanel").getComponent("timer_panel").hideRightTimer();
+            cc.find("Canvas/passTag").getComponent("passTag").hideLeftPass();
             pt.showRightPass();
             console.log("删除该不要的玩家出的牌，并右边显示不要");
 
@@ -347,6 +359,7 @@ cc.Class({
         this.prepareBtn.active = false;
     },
     endGame: function (data) {
+        cc.find("Canvas/timerPanel").getComponent("timer_panel").hideAllTimer();
         console.log(data);
         var end = this.endDialog.getComponent("end_dialog");
         if (data["team"] === g.player.team) {

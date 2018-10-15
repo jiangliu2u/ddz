@@ -34,12 +34,22 @@ cc.Class({
         this.faceSpr.spriteFrame = this.FACE_MAP[num];
     },
     changeFace(isLandlord) {
+        var self = this;
         if (isLandlord) {
-            this.faceSpr.spriteFrame = this.FACE_MAP[1];
-            console.log('地主头像');
+
+            cc.loader.loadRes("face/landlord1", cc.SpriteFrame, function (err, spriteFrame) {
+                self.faceSpr.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+                console.log('地主头像');
+            });
+            // this.faceSpr.getComponent(cc.Sprite).spriteFrame = this.FACE_MAP[1]
+            // this.faceSpr.spriteFrame = this.FACE_MAP[1];
         } else {
-            this.faceSpr.spriteFrame = this.FACE_MAP[0];
-            console.log('农民头像');
+            cc.loader.loadRes("face/farmer1", cc.SpriteFrame, function (err, spriteFrame) {
+                self.faceSpr.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+                console.log('农民头像');
+            });
+            // this.faceSpr.getComponent(cc.Sprite).spriteFrame = this.FACE_MAP[0]
+            // this.faceSpr.spriteFrame = this.FACE_MAP[0];
         }
     },
     start() {

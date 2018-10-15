@@ -48,9 +48,9 @@ cc.Class({
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
                     //todo 直接不要，记得删除
-                    setTimeout(function () {
-                        cp.pass();
-                    }, 50);
+                    // setTimeout(function () {
+                    //     cp.pass();
+                    // }, 50);
                 } else {
                     //左边玩家显示倒计时
                     this.hideLeft();
@@ -66,9 +66,9 @@ cc.Class({
                     this.showPokers(msg["pokers"], this.rightPanel);
                 } else {
                     //todo 直接不要，记得删除
-                    setTimeout(function () {
-                        cp.pass();
-                    }, 50);
+                    // setTimeout(function () {
+                    //     cp.pass();
+                    // }, 50);
                     console.log("左边玩家出牌");
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
@@ -80,9 +80,9 @@ cc.Class({
                     cp.setVisible(true);
                     this.showPokers(msg["pokers"], this.leftPanel);
                     //todo 直接不要，记得删除
-                    setTimeout(function () {
-                        cp.pass();
-                    }, 50);
+                    // setTimeout(function () {
+                    //     cp.pass();
+                    // }, 50);
                 } else {
                     console.log("右边玩家出牌");
                     this.hideLeft();

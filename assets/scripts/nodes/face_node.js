@@ -70,18 +70,18 @@ cc.Class({
         this.faces[0].addChild(faceItem1);
         faceItem1.setPosition(cc.v2(0, 0))
     },
-    _changeFace(facePanel, isFarmer) {
-        facePanel.children[0].getComponent("facecontroller").changeFace(isFarmer);
+    _changeFace(facePanel, isLandlord) {
+        facePanel.children[0].getComponent("facecontroller").changeFace(isLandlord);
     },
 
-    changeLeft(isFarmer) {
-        this._changeFace(this.leftFaceNode, isFarmer);
+    changeLeft(isLandlord) {
+        this._changeFace(this.faces[2], isLandlord);
     },
-    changeRight(isFarmer) {
-        this._changeFace(this.rightFaceNode, isFarmer);
+    changeRight(isLandlord) {
+        this._changeFace(this.faces[1], isLandlord);
     },
-    changeSelf(isFarmer) {
-        this._changeFace(this.selfFaceNode, isFarmer);
+    changeSelf(isLandlord) {
+        this._changeFace(this.faces[0], isLandlord);
     },
     deleteLeftFace() {
         this.leftFaceNode.children[0].destroy();

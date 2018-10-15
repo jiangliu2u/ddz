@@ -33,7 +33,7 @@ cc.Class({
             this.clock.addChild(clock);
             clock.setPosition(cc.v2(0, 0));
             var clockScript = clock.getComponent("clock");
-            clockScript.startCountdown(20);
+            clockScript.startCountdown(5);
             var hop = this.handedOutPokerPanel.getComponent("handedout_poker_panel");
             hop.hideSelf();
             this.node.active = true;
@@ -57,6 +57,7 @@ cc.Class({
         if (g.handedoutPokers["seatId"] === g.player.seatId) {
             if (pl_wrapper) {
                 console.log("此前无人出牌可以出牌");
+                cc.find("Canvas/timerPanel").getComponent("timer_panel").showRightTimer();
                 pp._onDiscard(pokers);
                 this.setVisible(false);
                 this.showSelfHandeOutPoker(ps);
@@ -72,7 +73,9 @@ cc.Class({
                     console.log("别人不起你的牌");
                     pp._onDiscard(pokers);
                     this.setVisible(false);
+                    cc.find("Canvas/timerPanel").getComponent("timer_panel").showRightTimer();
                     this.showSelfHandeOutPoker(ps);
+
 
                 } else {
                     console.log("别人要不起你的牌，但你出的不符合规则");
@@ -82,6 +85,7 @@ cc.Class({
                 if (pl_wrapper.follow(g.handedoutPokers["pokers"])) {
                     console.log("类型和大小都符合，可以跟牌");
                     pp._onDiscard(pokers);
+                    cc.find("Canvas/timerPanel").getComponent("timer_panel").showRightTimer();
                     this.setVisible(false);
                     this.showSelfHandeOutPoker(ps);
                 }
@@ -108,7 +112,7 @@ cc.Class({
                 pp._onPass();
                 console.log("不要");
                 var pt = cc.find("Canvas/passTag").getComponent("passTag");
-                // pat.rightTimer();
+                cc.find("Canvas/timerPanel").getComponent("timer_panel").showRightTimer();
                 pt.showSelfPass();
                 this.setVisible(false);
             }

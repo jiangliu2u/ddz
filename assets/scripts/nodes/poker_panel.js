@@ -124,7 +124,6 @@ cc.Class({
      * 出牌事件，参数是出去的牌
      */
     _onDiscard: function (pokers) {
-        console.log(pokers);
         var pokersToDel = [];
         var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
         for (var i = 0, len = pokers.length; i < len; i++) {
@@ -140,6 +139,50 @@ cc.Class({
             pInfo.push(pokersToDel[i].getComponent("poker").value);
             pokersToDel[i].destroy();
         }
+        var msg = {
+            cmd: "discard",
+            playerId: g.player.id,
+            pokers: pInfo
+        };
+        g.handedoutPokers = { seatId: g.player.seatId, pokers: pInfo };
+        if (this.pokers.length === 0) {
+            g.player.sendMsg(common.EventType.MSG_DDZ_GAME_OVER, { cmd: "gameover", playerId: g.player.id });
+            var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+            hop.deleteAll();//删除所有出的牌
+            var a = cc.find("Canvas/controlPanel").getComponent("control_panel");
+            a.setVisible(false);//隐藏出牌按钮
+            var pt = cc.find("Canvas/passTag").getComponent("passTag");
+            pt.hidePasses();//隐藏不要
+            var pokerPanel = cc.find("Canvas/pokerPanel").getComponent('poker_panel');
+            pokerPanel._deletePokers();//删除出的手牌
+            var end = cc.find("Canvas/endDialog").getComponent("end_dialog");
+            end.show(true, true);
+            g.player.team = 0;
+        } else {
+            g.player.sendMsg(common.EventType.MSG_DDZ_DISCARD, msg);
+            //删除右边玩家之前出的牌并显示倒计时
+            hop.hideRight();
+            this._neatenPokers(this.pokers);
+
+        }
+
+
+
+    },
+
+    autoDiscard: function () {
+        var pokersToDel = [];
+
+        var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
+        cc.find("Canvas/controlPanel").getComponent("control_panel").setVisible(false);
+        pokersToDel.push(this.pokers[this.pokers.length-1]);
+        this.pokers.splice(this.pokers.length - 1, 1);
+        var pInfo = [];
+        for (var i = 0; i < pokersToDel.length; i++) {
+            pInfo.push(pokersToDel[i].getComponent("poker").value);
+            pokersToDel[i].destroy();
+        }
+        cc.find("Canvas/controlPanel").getComponent("control_panel").showSelfHandeOutPoker(pInfo);
         var msg = {
             cmd: "discard",
             playerId: g.player.id,
