@@ -1,0 +1,31 @@
+{
+  "ver": "2.2.0",
+  "uuid": "990fb61f-9b18-4aa0-b21d-1ea58bf87d21",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "subMetas": {
+    "菜单-邮件": {
+      "ver": "1.0.3",
+      "uuid": "f7f5bb98-0485-4e82-b7cd-366b64965728",
+      "rawTextureUuid": "990fb61f-9b18-4aa0-b21d-1ea58bf87d21",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 63,
+      "height": 72,
+      "rawWidth": 63,
+      "rawHeight": 72,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
