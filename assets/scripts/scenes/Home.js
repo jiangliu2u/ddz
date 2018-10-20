@@ -31,6 +31,14 @@ cc.Class({
         coinLbl: {
             default: null,
             type: cc.Label
+        },
+        settings: {
+            default: null,
+            type: cc.Node
+        },
+        mail: {
+            default: null,
+            type: cc.Node
         }
     },
     onLoad: function () {
@@ -42,6 +50,8 @@ cc.Class({
         // 2nd scene - my loading connect
         // 3rd recevied success cmd: get homeinfo(userinfo)
         // 4th succ: loading home scene
+        this.settings = cc.find("Canvas/settings");
+        this.mail = cc.find("Canvas/mail");
         this.nameLbl.string = g.player.name || 'jiangliu';
         this.coinLbl.string = g.player.coin || -9999;
         g.getLeftPlayerSeatId = function (selfSeatId) {
@@ -64,23 +74,30 @@ cc.Class({
         console.log("onDestroy");
         common.EventDispatcher.ignore(common.EventType.MSG_DDZ_CREATE_ROOM, this.onCreateRoom, this);
     },
-
-    onCreateRoom(data) {
-        cc.director.loadScene('Game');
+    showSettings() {
+        // cc.loader.loadRes("prefab/dialog/settings", (errorMessage, prefab) => {
+        //     if (errorMessage) {
+        //         cc.log("加载设置预载资源出错");
+        //         return;
+        //     }
+        //     console.log(this);
+        //     this.settings = cc.instantiate(prefab);
+        //     this.node.addChild(this.settings);
+        //     this.settings.setPosition(cc.v2(0, 0));
+        //     console.log("settings");
+        // });
+        this.settings.active = true;
+    },
+    hideSettings() {
+        this.settings.active = false;
+    },
+    showMail() {
+        this.mail.active = true;
+    },
+    hideMail() {
+        this.mail.active = false;
     },
 
-    createRoom: function () {
-        g.player.emit("create room", { 'name': this.id });
-        if (this._onClickCallback) {
-            this._onClickCallback();
-        }
-        this.loadingMask.active = true;
-
-        this.loadingAnimation.play('loading');
-        cc.director.loadScene('Game');
-
-
-    },
     showTables: function (data) {
         this.tableListPanel.getComponent("table_list_panel").init(data);
     },
