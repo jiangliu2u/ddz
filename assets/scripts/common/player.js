@@ -6,15 +6,15 @@ function Player(socket) {
     Player.ID++;
     this.status= -1;
     this.seatId = null;
-    this.nickname = "jdakfdja;";
+    // this.nickname = "jdakfdja;";
     this.coin = Math.random() * 10000;
     this.gender = 3;
 }
 Player.prototype = {
     initPlayerInfo(info) {
         this.name = info["username"];
-        this.nickName = info["nickname"];
-        this.gender = info["gender"];
+        // this.nickName = info["nickname"];
+        // this.gender = info["gender"];
         this.coin = info["coin"];
     },
     sendMsg: function (cmd, msg, handler) {

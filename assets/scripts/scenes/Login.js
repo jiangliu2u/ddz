@@ -9,12 +9,14 @@ cc.Class({
     properties: {
         username: { default: null, type: cc.EditBox },
         password: { default: null, type: cc.EditBox },
+        loading: { default: null, type: cc.Node }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         this.initSocket();
+        this.loading = cc.find("Canvas/loading");
     },
     initSocket() {
         if (cc.sys.isNative) {
@@ -24,23 +26,20 @@ cc.Class({
         }
         var socket = io.connect('http://127.0.0.1:3001');
         // var socket = io.connect('http://172.96.224.103:3001');
-        var self = this;
-        socket.on("yourid", function (data) {
+        socket.on("yourid", (data) => {
             var id = data['id'];
             g.player = new Player(socket);
             g.player.id = id;
-            g.player.register(common.EventType.RESP_DDZ_REGISTER, self.onRegistered, self);
-            g.player.register(common.EventType.RESP_DDZ_LOGIN, self.onLogined, self);
+            g.player.register(common.EventType.RESP_DDZ_REGISTER, this.onRegistered, self);
+            g.player.register(common.EventType.RESP_DDZ_LOGIN, this.onLogined, self);
         });
 
     },
     start() {
-        var self = this;
-        setTimeout(function () {
-            self.username.string = "jay" + Math.floor(Math.random() * 100);
-            self.password.string = '123';
-            self.register();
-        }, 1000)
+        setTimeout(() => {
+            this.username.string = "test1";
+            this.password.string = '123';
+        }, 100)
 
 
     },
@@ -54,7 +53,6 @@ cc.Class({
             return;
         }
         var url = "http://127.0.0.1:3001/users/login/";
-        console.log("username" + username + " password" + password);
         var msg = {};
         msg.username = username;
         msg.password = password;
@@ -62,37 +60,31 @@ cc.Class({
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.open("POST", url, true);
         xmlHttpRequest.setRequestHeader("Content-Type", "application/json")
-        var self = this;
-        xmlHttpRequest.onreadystatechange = function () {
+        xmlHttpRequest.onreadystatechange = () => {
             if (xmlHttpRequest.status === 200 && xmlHttpRequest.readyState === 4) {
-                self.onLogined(xmlHttpRequest.response)
+                this.onLogined(xmlHttpRequest.response)
             }
         };
-        console.log(JSON.stringify(msg));
         xmlHttpRequest.send(json);
         //g.player.sendMsg(common.EventType.MSG_DDZ_LOGIN, msg);
     },
     onLogined: function (response) {
 
-        console.log('logined');
         var response = JSON.parse(response);
         console.log(response);
-        console.log(typeof (response));
         if (!response) {
             console.log('login IS UNDEFINED');
             return;
         }
-        var succ = response['error_code'];
-
+        var succ = response['code'];
         if (succ !== 0) {
             console.error('error code ' + succ);
             return;
         }
-
         var player = response['user_info'];
         g.player.initPlayerInfo(player);
-        console.log(player);
-        //cc.director.loadScene("Home");
+        this.loading.active =true;
+        cc.director.loadScene("Home");
     },
     register: function () {
         var username = this.username.string;
@@ -130,7 +122,6 @@ cc.Class({
         var player = response['player_info'];
         g.player.tables = response["tables"];
         g.player.initPlayerInfo(player);
-        console.log(player);
         cc.director.loadScene("Home");
         //
 
