@@ -80,7 +80,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 196,
+    "_zIndex": 0,
     "groupIndex": 0,
     "_id": ""
   },
@@ -143,7 +143,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 553,
+    "_zIndex": 0,
     "groupIndex": 0,
     "_id": ""
   },
@@ -175,7 +175,7 @@
     "_atlas": {
       "__uuid__": "f4f9d59d-0844-4ef0-a9a7-dc582448a797"
     },
-    "_id": "3dVNsp9/5EWZIHA57k2AVt"
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -247,7 +247,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 554,
+    "_zIndex": 0,
     "groupIndex": 0,
     "_id": ""
   },
@@ -262,7 +262,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "da530b70-2d89-4b88-b517-a32283e1baf8"
+      "__uuid__": "32c4cec3-447d-4208-b04b-16da5b204176"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -277,7 +277,7 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
-    "_id": "941//NwNdGWqHZl5DZ/kg9"
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -349,7 +349,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 555,
+    "_zIndex": 0,
     "groupIndex": 0,
     "_id": ""
   },
@@ -376,7 +376,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
-    "_id": "82NVVbr1pF5ZsCUHpezHL+"
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -448,7 +448,7 @@
     },
     "_skewX": 0,
     "_skewY": 0,
-    "_localZOrder": 556,
+    "_zIndex": 0,
     "groupIndex": 0,
     "_id": ""
   },
@@ -475,7 +475,7 @@
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
-    "_id": "feQFWyWstA/YOQTY9sqRXa"
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -502,12 +502,6 @@
       },
       {
         "__uuid__": "326cea6c-4e53-42d2-83dd-2ecc6e8f393d"
-      },
-      {
-        "__uuid__": "da530b70-2d89-4b88-b517-a32283e1baf8"
-      },
-      {
-        "__uuid__": "da530b70-2d89-4b88-b517-a32283e1baf8"
       }
     ],
     "nameLbl": {
@@ -519,7 +513,7 @@
     "faceSpr": {
       "__id__": 6
     },
-    "_id": "7d5dlWW8BML5mQhC0exksW"
+    "_id": ""
   },
   {
     "__type__": "cc.PrefabInfo",

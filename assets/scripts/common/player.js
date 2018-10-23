@@ -13,8 +13,8 @@ function Player(socket) {
 Player.prototype = {
     initPlayerInfo(info) {
         this.name = info["username"];
-        // this.nickName = info["nickname"];
-        // this.gender = info["gender"];
+        this.nickName = info["nickname"];
+        this.gender = info["gender"];
         this.coin = info["coin"];
     },
     sendMsg: function (cmd, msg, handler) {

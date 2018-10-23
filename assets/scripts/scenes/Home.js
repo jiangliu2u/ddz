@@ -55,6 +55,7 @@ cc.Class({
         this.mail = cc.find("Canvas/mail");
         this.playWay = cc.find("Canvas/playWay");
         this.tableSelection = cc.find("Canvas/Home/tableSelection");
+        this.loading = cc.find("Canvas/loading");
         this.nameLbl.string = g.player.name || 'jiangliu';
         this.coinLbl.string = g.player.coin || -9999;
         g.getLeftPlayerSeatId = function (selfSeatId) {
@@ -63,7 +64,7 @@ cc.Class({
         g.getRightPlayerSeatId = function (selfSeatId) {
             return (selfSeatId + 1) % 3;
         };
-
+        console.log(g.player);
     },
     ctor: function () {
 
@@ -100,7 +101,11 @@ cc.Class({
     hideTableSelection() {
         this.tableSelection.active = false;
     },
-
+    enterTable(id){
+        g.player.sendMsg(common.EventType.MSG_DDZ_ENTER_TABLE,{"cmd":"join","tableId":id,"playerId":g.player.id});
+        this.loading.active = true;
+        cc.director.loadScene("Game");
+    },
     start: function () {
 
     },
