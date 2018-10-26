@@ -21,12 +21,12 @@ cc.Class({
     },
     setVisible(v) {
         if (v) {
-            this.startCountdown(15);
+            this.startCountdown(3);
         }
         this.node.active = v;
     },
     onEnable(){
-        this.startCountdown(15);
+        this.startCountdown(3);
     },
     onDisable(){
         this.stopCountdown();
@@ -54,8 +54,8 @@ cc.Class({
     },
 
     stopCountdown: function () {
-        this._doSetCountdown(0);
-        //this._doHide();
+        //this._doSetCountdown(3);
+        this._doHide();
         this.unschedule(this._scheduleClock);
     },
 

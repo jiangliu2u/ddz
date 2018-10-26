@@ -23,7 +23,7 @@ cc.Class({
         if (v) {
             console.log("set true");
             this._doShow();
-            this.startCountdown(5);
+            this.startCountdown(3);
         }else{
             this._doHide();
         }

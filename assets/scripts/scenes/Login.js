@@ -24,8 +24,7 @@ cc.Class({
         } else {
             var io = require('../common/socket.io');
         }
-    //    var socket = io.connect('http://127.0.0.1:3001');
-        var socket = io.connect('http://172.96.224.103:3001');
+       var socket = io.connect('http://127.0.0.1:3001');
         socket.on("yourid", (data) => {
             var id = data['id'];
             g.player = new Player(socket);
@@ -52,8 +51,7 @@ cc.Class({
         if (password.length > 12) {
             return;
         }
-        // var url = "http://127.0.0.1:3001/users/login/";
-        var url = "http://172.96.224.103/users/login/";
+        var url = "http://127.0.0.1:3001/users/login/";
         var msg = {};
         msg.username = username;
         msg.password = password;

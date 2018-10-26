@@ -318,7 +318,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 88,
+      "width": 0,
       "height": 22
     },
     "_anchorPoint": {
@@ -364,8 +364,8 @@
     "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
-    "_string": "好好学习",
-    "_N$string": "好好学习",
+    "_string": "",
+    "_N$string": "",
     "_fontSize": 22,
     "_lineHeight": 22,
     "_enableWrapText": true,
@@ -417,7 +417,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 61.18,
+      "width": 0,
       "height": 26
     },
     "_anchorPoint": {
@@ -463,8 +463,8 @@
     "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
-    "_string": "99999",
-    "_N$string": "99999",
+    "_string": "",
+    "_N$string": "",
     "_fontSize": 22,
     "_lineHeight": 26,
     "_enableWrapText": true,
@@ -502,6 +502,9 @@
       },
       {
         "__uuid__": "326cea6c-4e53-42d2-83dd-2ecc6e8f393d"
+      },
+      {
+        "__uuid__": "32c4cec3-447d-4208-b04b-16da5b204176"
       }
     ],
     "nameLbl": {

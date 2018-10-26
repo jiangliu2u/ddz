@@ -18,7 +18,7 @@ cc.Class({
             default: null,
             type: cc.Sprite
         },
-        
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -28,28 +28,18 @@ cc.Class({
     },
 
     initFace: function (name, coin, num) {
-        this.nameLbl.string = name;
-        this.coinLbl.string = coin + '';
-        // var spriteFrame =
-        this.faceSpr.spriteFrame = this.FACE_MAP[num];
+        if(name)this.nameLbl.string = name;
+        if(coin)this.coinLbl.string = coin + '';
+        if(num)this.faceSpr.spriteFrame = this.FACE_MAP[num];
     },
     changeFace(isLandlord) {
-        var self = this;
         if (isLandlord) {
-
-            cc.loader.loadRes("face/landlord1", cc.SpriteFrame, function (err, spriteFrame) {
-                self.faceSpr.getComponent(cc.Sprite).spriteFrame = spriteFrame;
-                console.log('地主头像');
-            });
-            // this.faceSpr.getComponent(cc.Sprite).spriteFrame = this.FACE_MAP[1]
-            // this.faceSpr.spriteFrame = this.FACE_MAP[1];
+            console.log(this.faceSpr.size + ' landlord size');
+            console.log(this.faceSpr);
+            this.faceSpr.spriteFrame = this.FACE_MAP[1];
         } else {
-            cc.loader.loadRes("face/farmer1", cc.SpriteFrame, function (err, spriteFrame) {
-                self.faceSpr.getComponent(cc.Sprite).spriteFrame = spriteFrame;
-                console.log('农民头像');
-            });
-            // this.faceSpr.getComponent(cc.Sprite).spriteFrame = this.FACE_MAP[0]
-            // this.faceSpr.spriteFrame = this.FACE_MAP[0];
+            console.log(this.faceSpr);
+            this.faceSpr.spriteFrame = this.FACE_MAP[0];
         }
     },
     start() {

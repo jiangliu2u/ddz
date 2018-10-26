@@ -65,9 +65,9 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        timerPanel:{
-            default:null,
-            type:cc.Node
+        timerPanel: {
+            default: null,
+            type: cc.Node
         }
     },
 
@@ -102,11 +102,12 @@ cc.Class({
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_PREPARED, this.onOtherPrepared, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_PLAYER_LEAVE, this.onOtherLeave, this);
         common.EventDispatcher.listen(common.EventType.MSG_DDZ_GAME_OVER, this.endGame, this);
-        this.faceNodes.getComponent("face_node").createSelf();
+        this.faceNodes.getComponent("face_node").createSelf("gaga");
+        this.createRight=(data)=>{this.faceNodes.getComponent("face_node").createRight(data)};
+        this.createLeft=(data)=>{this.faceNodes.getComponent("face_node").createLeft(data)};
         g.player.team = 0;//加入桌子默认队伍为0
         this._setControlPanelVisible(this.status);
         this.call_and_rob = this.callLandlord.getComponent('call_landlord');
-        this._createDipai([-1, -1, -1]);
         g.player.status = 1;
         g.game = this;
 
@@ -148,12 +149,10 @@ cc.Class({
     onPlayerEnterTable: function (data) {
         // 转换seatId
         console.log('new players');
-        console.log(this);
-        var fn = this.faceNodes.getComponent('face_node');
         if (g.getLeftPlayerSeatId(g.player.seatId) === data['seatId']) {
-            fn._createLeft(data);
+            this.createLeft(data);
         } else {
-            fn._createRight(data);
+            this.createRight(data);
         }
     },
 
@@ -162,19 +161,34 @@ cc.Class({
     onEnterTable: function (data) {
         // 转换seatId
         console.log('enter table');
-        var self = this;
-        
-        setTimeout(function () {
-            self.createFace(data);
-        }, 50);
+        this.createFace(data);
     },
     createFace: function (data) {
-        var fn = cc.find('Canvas/faceNode').getComponent('face_node');
-        console.log('初始化其他玩家头像');
-        fn._initFace(data);
+        if (data["allPlayers"]) {//加入桌子时获取已经加入的玩家
+            console.log("获取已经加入的玩家...");
+            switch (data["allPlayers"].length) {
+                case 0:
+                    console.log("case 0 获取已经加入的玩家，自己的座位号" + 0);
+                    g.player.setSeatId(0);
+                    g.handedoutPokers = { seatId: 0, pokers: [] };
+                    break;
+                case 1:
+                    g.player.setSeatId(1);
+                    g.handedoutPokers = { seatId: 1, pokers: [] };
+                    console.log("case 1 获取已经加入的玩家，自己的座位号" + 1);
+                    this.createLeft(data["allPlayers"][0]);
+                    break;
+                case 2:
+                    g.player.setSeatId(2);
+                    g.handedoutPokers = { seatId: 2, pokers: [] };
+                    console.log("case 2 获取已经加入的玩家，自己的座位号" + 2);
+                    this.createLeft(data["allPlayers"][0]);
+                    this.createRight(data["allPlayers"][1]);
+                    break;
+            }
 
-
-
+        }
+        
     },
     //有玩家离开
     onOtherLeave(data) {
@@ -215,6 +229,7 @@ cc.Class({
         //landlord1
         var fn = cc.find('Canvas/faceNode').getComponent('face_node');
         fn.changeSelf(landlord === seatId);
+        console.log("自己： " + g.player.seatId + " 地主：" + landlord + " 左：" + g.getLeftPlayerSeatId(seatId) + " 右： " + g.getRightPlayerSeatId(seatId));
         fn.changeRight(landlord === g.getRightPlayerSeatId(seatId));
         fn.changeLeft(landlord === g.getLeftPlayerSeatId(seatId));
         this._createDipai(this.dipai);
@@ -326,7 +341,8 @@ cc.Class({
 
     //发牌时创建手牌
     _createHandPoker: function (data) {
-
+        
+        this._createDipai([-1, -1, -1]);
         console.log("开始发牌");
         console.log(data);
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
@@ -377,8 +393,9 @@ cc.Class({
         g.handedoutPokers = { seatId: g.player.seatId, pokers: [] };//把出过的牌池设置为空
         var pokerPanel = this.pokerPanel.getComponent('poker_panel');
         pokerPanel._deletePokers();
-        console.log(g.player.team);
         g.player.team = 0;
+        var fn = cc.find('Canvas/faceNode').getComponent('face_node');
+        fn.changeToDefault();
     },
     onDestroy() {
         //解绑

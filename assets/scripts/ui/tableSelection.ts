@@ -6,18 +6,25 @@ export default class tableSelection extends cc.Component {
 
     @property(cc.Label)
     tableId: cc.Label = null;
-    entertable(){
-        cc.find("Canvas/Home").getComponent("Home").enterTable(parseInt(this.tableId.string));
+    entertable() {
+        let tId = parseInt(this.tableId.string)
+        if (tId > 1 && tId < 100) {
+            cc.find("Canvas/Home").getComponent("Home").enterTable(parseInt(this.tableId.string));
+        }
+        else {
+            console.log('桌子不存在!');
+            return;
+        }
     }
     onLoad() {
-        this.tableId.string = '';
+        this.tableId.string = ' ';
     }
 
     start() {
 
     }
     one() {
-        if(this.tableId.string.length<3) this.tableId.string += 1;
+        if (this.tableId.string.length < 3) this.tableId.string += 1;
     }
     two() {
         if (this.tableId.string.length < 3) this.tableId.string += 2;
@@ -47,14 +54,14 @@ export default class tableSelection extends cc.Component {
     zero() {
         if (this.tableId.string.length < 3) this.tableId.string += 0;
     }
-    retype(){
-        this.tableId.string='';
+    retype() {
+        this.tableId.string = '';
     }
-    delete(){
-         this.tableId.string=this.tableId.string.substring(-1,this.tableId.string.length-1);
+    delete() {
+        this.tableId.string = this.tableId.string.substring(-1, this.tableId.string.length - 1);
     }
-    onEnable(){
-        this.tableId.string='';
+    onEnable() {
+        this.tableId.string = '';
     }
     // update (dt) {}
 }
