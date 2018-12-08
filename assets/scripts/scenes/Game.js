@@ -85,7 +85,7 @@ cc.Class({
         this.callLandlord = cc.find('Canvas/callLandlord');
         this.callLandlord.addComponent('call_landlord');
         this.pokerPanel = cc.find('Canvas/pokerPanel');
-        this.pokerPanel.addComponent('poker_panel');
+        //this.pokerPanel.addComponent('poker_panel');
         this.timerPanel = cc.find('Canvas/timerPanel');
         this.timerPanel.addComponent('timer_panel');
         common.Protocol.init();

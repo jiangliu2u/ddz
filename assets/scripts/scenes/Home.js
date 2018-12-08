@@ -90,7 +90,8 @@ cc.Class({
         this.showBoard.active = true;
     },
     showTableSelection() {
-        this.tableSelection.active = true;
+        this.enterTable(11);
+        // this.tableSelection.active = true;
     },
     hideTableSelection() {
         this.tableSelection.active = false;

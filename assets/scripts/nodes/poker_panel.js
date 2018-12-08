@@ -24,6 +24,14 @@ cc.Class({
         altas: {
             default: null,
             type: cc.SpriteAtlas
+        },
+        pokers: {
+            default: [],
+            type: cc.Node
+        },
+        selectedPokers: {
+            default: [],
+            type: cc.Node
         }
     },
 
@@ -31,41 +39,63 @@ cc.Class({
 
     onLoad() {
 
-        this.pokers = [];
-        var self = this;
         var node = this.node;
         this._startPos = 0;
         g.pN = this;
         // globa.eventmanager.addlisnter(global.EventType.EVENT_DISCARD, this._onDiscard, this);
 
         // 手牌点击事件监听
-        node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart);
-        node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            self.onTouchEnd(event);
+        //node.on(cc.Node.EventType.TOUCH_START,this.onTouchStart.bind(this));
+        node.on(cc.Node.EventType.TOUCH_START, (event) => {
+            this.onTouchStart(event);
         });
+        node.on(cc.Node.EventType.TOUCH_END, (event) => {
+            this.onTouchEnd(event);
+        });
+        // node.on(cc.Node.EventType.TOUCH_MOVE, (event) => {
+        //     this.onTouchMove(event);
+        // });
+
+        g.addTestPokers = () => {
+            this._createPokers([0x11, 0x12, 0x34, 0x11, 0x11, 0x11, , 0x34]);
+        }
+    },
+    onTouchMove(event) {
+        var pos = event.getLocation();
+        var target = event.getCurrentTarget();
+        var localPos = target.convertToNodeSpaceAR(pos);
+        console.log(event.getDelta().x);
+        var pPos = this._calcPokerArea();
+        if (event.getDelta().x >= this._MARGIN) {
+            var index = Math.floor((localPos.x - pPos.leftPos) / this._MARGIN);
+            console.log(index);
+            this.addPokerToSelected(this.pokers[index]);
+        }
+
     },
 
     onTouchStart: function (event) {
         var pos = event.getLocation();
         var target = event.getCurrentTarget();
-        var localPos = target.convertToNodeSpace(pos);
+        var localPos = target.convertToNodeSpaceAR(pos);
         this._startPos = localPos;
-        console.log("TOUCH_START localPos.x: " + localPos.x + ",localPos.y: " + localPos.y);
+        var boudingBox = this.node.getBoundingBox();
     },
 
     onTouchEnd: function (event) {
         var pos = event.getLocation();
         var target = event.getCurrentTarget();
-        var endPos = target.convertToNodeSpace(pos);
+        var endPos = target.convertToNodeSpaceAR(pos);
 
         // delta 如果是正的，说明是右往左
         // delta 如果是负的，说明是左往右
-        console.log(this);
-        console.log("TOUCH_END endPos.x: " + endPos.x + ",endPos.y: " + endPos.y);
-        target.getComponent('pokerPanel')._calcTouchedPokers(this._startPos, endPos);
+        this._calcTouchedPokers(this._startPos, endPos);
 
     },
-
+    addPokerToSelected(poker) {
+        poker.getComponent("poker").select();
+        this.selectedPokers.push(poker);
+    },
 
     getSelectedPokers: function () {
         var pokers = this.pokers;
@@ -88,29 +118,45 @@ cc.Class({
      * 计算出剩余扑克的所在的区域
      */
     _calcPokerArea: function () {
-        return (this.pokers.length - 1) * this._MARGIN + this._WIDTH;
+        return { leftPos: this.pokers[0].x - this._WIDTH / 2, rightPos: this.pokers[this.pokers.length - 1].x + this._WIDTH / 2 };
     },
 
     _calcTouchedPokers: function (startX, endX) {
-        var rightPos = this._calcPokerArea();
-        var leftPos = -rightPos;
-        if (startX > rightPos && endX > rightPos || startX < leftPos && endX < leftPos) {
+        var Pos = this._calcPokerArea();
+        var leftPos = Pos.leftPos;
+        var rightPos = Pos.rightPos;
+        if (startX.x > rightPos && endX.x > rightPos || startX.x < leftPos && endX.x < leftPos) {
             return [];
         }
         /**
          * 最右侧的边缘坐标和选中区域右坐标选较小值
          * 最左侧的边缘坐标和选中区域左坐标选较大值
          */
-        var rightX = Math.max(startX, endX);
-        var leftX = Math.min(startX, endX);
+        var rightX = Math.max(startX.x, endX.x);
+        var leftX = Math.min(startX.x, endX.x);
         var realRX = Math.min(rightX, rightPos);
         var realLX = Math.max(leftX, leftPos);
-
+        console.log(this._MARGIN);
         var leftIndex = Math.floor((realLX - leftPos) / this._MARGIN);
         var rightIndex = Math.floor((realRX - leftPos) / this._MARGIN);
         console.log("leftIndex:" + leftIndex + " rightIndex:" + rightIndex);
+        for (let i = leftIndex; i <= rightIndex; i++) {
+            var _poker = this.pokers[i];
+            if (_poker) {
+                _poker.getComponent("poker").select();
+            }
+            else {
+                // console.error("计算错误" + i);
+            }
+        }
 
-
+    },
+    resetPokers() {
+        for (let i = 0; i < this.pokers.length; i++) {
+            if (this.pokers[i].getComponent("poker").selected) {
+                this.pokers[i].getComponent("poker").deSelect();
+            }
+        }
     },
 
     start() {
@@ -122,6 +168,7 @@ cc.Class({
 
     /**
      * 出牌事件，参数是出去的牌
+     * @param pokers 要出的牌
      */
     _onDiscard: function (pokers) {
         var pokersToDel = [];
@@ -175,7 +222,7 @@ cc.Class({
 
         var hop = cc.find("Canvas/handedOutPokerPanel").getComponent("handedout_poker_panel");
         cc.find("Canvas/controlPanel").getComponent("control_panel").setVisible(false);
-        pokersToDel.push(this.pokers[this.pokers.length-1]);
+        pokersToDel.push(this.pokers[this.pokers.length - 1]);
         this.pokers.splice(this.pokers.length - 1, 1);
         var pInfo = [];
         for (var i = 0; i < pokersToDel.length; i++) {
@@ -230,6 +277,7 @@ cc.Class({
             this.node.addChild(pokerPrefab);
             this.pokers.push(pokerPrefab);
         }
+        this._neatenPokers(this.pokers);
     },
     addPokers(pokers) {
         for (var i = 0, len = pokers.length; i < len; i++) {

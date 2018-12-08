@@ -18,7 +18,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
 var tableSelection = /** @class */ (function (_super) {
     __extends(tableSelection, _super);
@@ -86,7 +86,7 @@ var tableSelection = /** @class */ (function (_super) {
     tableSelection.prototype.retype = function () {
         this.tableId.string = '';
     };
-    tableSelection.prototype.delete = function () {
+    tableSelection.prototype["delete"] = function () {
         this.tableId.string = this.tableId.string.substring(-1, this.tableId.string.length - 1);
     };
     tableSelection.prototype.onEnable = function () {
@@ -94,10 +94,10 @@ var tableSelection = /** @class */ (function (_super) {
     };
     __decorate([
         property(cc.Label)
-    ], tableSelection.prototype, "tableId", void 0);
+    ], tableSelection.prototype, "tableId");
     tableSelection = __decorate([
         ccclass
     ], tableSelection);
     return tableSelection;
 }(cc.Component));
-exports.default = tableSelection;
+exports["default"] = tableSelection;

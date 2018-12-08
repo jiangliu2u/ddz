@@ -15,7 +15,6 @@ const common = require('_init');
                 console.error("event handler is undefined!");
                 return;
             }
-            console.log(__filename+"   "+ eventName +" 事件绑定成功！");
 
             this._eventMap[eventName] = this._eventMap[eventName] || [];
             this._eventMap[eventName].push({

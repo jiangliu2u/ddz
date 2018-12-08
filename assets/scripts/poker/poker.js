@@ -53,6 +53,10 @@ cc.Class({
             default: null,
             type: cc.SpriteAtlas
         },
+        layer: {
+            default: null,
+            type: cc.Node
+        },
         value: null,
         selected: false
     },
@@ -165,19 +169,42 @@ cc.Class({
     _isJoker: function (type) {
         return type > 3;
     },
-    selectPoker: function () {//选中扑克和取消选择
-        if (!this._clickEnable) {
-            return;
+    select: function () {//选中扑克和取消选择
+        if (this.selected) {
+            this.selected = false;
+            this.node.y -= 15;
+            this.delMask();
+        } else {
+            this.selected = true;
+            this.node.y += 15;
+            this.addMask();
         }
-        if (this.selected) {//取消选中
+
+    },
+    deSelect: function () {
+        if(this.selected){
             this.selected = false;
             this.node.y -= 15;
         }
-        else {//选中
-            this.selected = true;
-            this.node.y += 15;
-        }
+        
+    },
 
+    /**
+     * 添加一层蒙版
+     */
+    addMask(){
+        this.layer.active = true;
+    },
+    delMask(){
+        this.layer.active = false;
+    },
+    checkSelected(){
+        if(this.selected){
+            
+            this.addMask();
+        }else{
+            this.delMask();
+        }
     },
     // LIFE-CYCLE CALLBACKS:
 
@@ -188,5 +215,6 @@ cc.Class({
     start() {
     },
 
-    // update (dt) {},
+    update (dt) {
+    },
 });

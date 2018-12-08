@@ -84,6 +84,7 @@ cc.Class({
         g.player.initPlayerInfo(player);
         this.loading.active =true;
         cc.director.loadScene("Home");
+        
     },
     register: function () {
         var username = this.username.string;
@@ -121,7 +122,8 @@ cc.Class({
         var player = response['player_info'];
         g.player.tables = response["tables"];
         g.player.initPlayerInfo(player);
-        cc.director.loadScene("Home");
+        //cc.director.loadScene("Home");
+        cc.find("Canvas/Home").getComponent("Home").enterTable(11);
         //
 
     },
